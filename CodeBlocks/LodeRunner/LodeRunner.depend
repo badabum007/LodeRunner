@@ -595,7 +595,7 @@
 	<GL/glut.h>
 	<math.h>
 
-1431987362 source:c:\users\usuario\desktop\fcg\loderunner\src\main.cpp
+1435030083 source:c:\users\usuario\desktop\fcg\loderunner\src\main.cpp
 	<windows.h>
 	<stdio.h>
 	<stdlib.h>
@@ -603,17 +603,17 @@
 	<cmath>
 	<iostream>
 	<gl/glut.h>
-	<al/alut.h>
+	"../CodeBlocks/include/al/alut.h"
 	"bitmap.h"
 	"3DObject.h"
 
-1334599568 c:\users\usuario\desktop\fcg\loderunner\codeblocks\include\al\alut.h
+1435030122 c:\users\usuario\desktop\fcg\loderunner\codeblocks\include\al\alut.h
 	<al/alc.h>
 	<al/al.h>
 	<OpenAL/alc.h>
 	<OpenAL/al.h>
-	<AL/al.h>
-	<AL/alc.h>
+	"al.h"
+	"alc.h"
 
 1176501768 c:\users\usuario\desktop\fcg\loderunner\codeblocks\include\al\alc.h
 
@@ -621,4 +621,35 @@
 
 1398812012 source:c:\users\usuario\desktop\fcg\loderunner\src\texture.cpp
 	"Texture.h"
+
+1435035823 source:c:\users\usuario\desktop\fcg\loderunner\src\color.cpp
+	"Color.h"
+	<stdint.h>
+
+1435035976 c:\users\usuario\desktop\fcg\loderunner\src\color.h
+	<stdint.h>
+
+1435034723 source:c:\users\usuario\desktop\fcg\loderunner\src\gridbitmap.cpp
+	"GridBitmap.h"
+	"Color.h"
+
+1435034715 c:\users\usuario\desktop\fcg\loderunner\src\gridbitmap.h
+	"Color.h"
+
+1435034734 source:c:\users\usuario\desktop\fcg\loderunner\src\andar.cpp
+	"Andar.h"
+
+1435034465 c:\users\usuario\desktop\fcg\loderunner\src\andar.h
+	"GridBitmap.h"
+
+1435036774 source:c:\users\usuario\desktop\fcg\loderunner\src\filemapreader.cpp
+	"FileMapReader.h"
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+
+1435036025 c:\users\usuario\desktop\fcg\loderunner\src\filemapreader.h
+	<string.h>
+	<stdlib.h>
+	"GridBitmap.h"
 

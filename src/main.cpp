@@ -30,7 +30,7 @@ seja uma spotlight;
 #include <gl/glut.h>
 
 //openal (sound lib)
-#include <al/alut.h>
+#include "../CodeBlocks/include/al/alut.h"
 
 //bitmap class to load bitmaps for textures
 #include "bitmap.h"
