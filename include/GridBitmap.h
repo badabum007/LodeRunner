@@ -1,11 +1,12 @@
 #ifndef GRIDBITMAP_H
 #define GRIDBITMAP_H
 
-using namespace std;
+
 
 
 #include "Color.h"
 #include "vector"
+#include "Color.h"
 #define GRID_HEIGHT 16
 #define GRID_WIDTH 16
 
@@ -27,10 +28,10 @@ class GridBitmap
 {
 public:
         GridBitmap();
-        GridBitmap(vector<GridBitmap> grid);
+        GridBitmap(std::vector<std::vector<Color>> grid);
 
 
-        vector<GridBitmap> grid;
+        std::vector<std::vector<Color>> grid;
     protected:
     private:
 };

@@ -2,15 +2,17 @@
 #define FILEMAPREADER_H_INCLUDED
 
 #include <string.h>
+#include <string>
 #include <stdlib.h>
 #include "GridBitmap.h"
+#include "Mapa.h"
 
 
 class FileMapReader
 {
     public:
         FileMapReader();
-        static GridBitmap* generateMapBitmap(char* path);
+        static Mapa generateMapBitmap(std::string path);
 
 };
 

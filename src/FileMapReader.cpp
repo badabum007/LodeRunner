@@ -1,9 +1,13 @@
-#include "FileMapReader.h"
-#include "bitmap.h"
+#include "../include/FileMapReader.h"
+#include "../include/bitmap.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <iostream>
 #include <string.h>
+#include <sstream>
+
+#include "../include/Mapa.h"
+#include "../include/Andar.h"
 
 using namespace std;
 
@@ -12,11 +16,23 @@ FileMapReader::FileMapReader()
 {
 }
 
+std::string to_string(int value)
+    {
+      //create an output string stream
+      std::ostringstream os ;
 
-unsigned char* ReadBMP(char* filename)
+      //throw the value into the string stream
+      os << value ;
+
+      //convert the string stream into a string and return
+      return os.str() ;
+    }
+
+GridBitmap ReadBMP(std::string filename)
 {
     int i;
-    FILE* f = fopen(filename, "rb");
+    GridBitmap grid;
+    FILE* f = fopen(filename.c_str(), "rb");
 
     if(f == NULL)
         throw "Argument Exception";
@@ -39,6 +55,7 @@ unsigned char* ReadBMP(char* filename)
 
     for(int i = 0; i < height; i++)
     {
+        std::vector<Color> linha;
         fread(data, sizeof(unsigned char), row_padded, f);
         for(int j = 0; j < width*3; j += 3)
         {
@@ -46,18 +63,48 @@ unsigned char* ReadBMP(char* filename)
             tmp = data[j];
             data[j] = data[j+2];
             data[j+2] = tmp;
-
+            Color cor = Color(data[j], data[j+1], data[j+2]);
+            linha.push_back(cor);
            // cout << "R: "<< (int)data[j] << " G: " << (int)data[j+1]<< " B: " << (int)data[j+2]<< endl;
         }
+        grid.grid.push_back(linha);
     }
 
     fclose(f);
-    return data;
+    return grid;
 }
 
-GridBitmap* FileMapReader::generateMapBitmap(char* path)
+Mapa FileMapReader::generateMapBitmap(std::string path)
 {
-    unsigned char* data = ReadBMP(path);
+    int andarInt=1;
+    int nivel=0;
+    std::string pathAux;
+    Mapa mapa;
+
+
+    try
+    {
+        while(true)
+        {
+             Andar andar;
+            for(nivel=0;nivel<2;nivel++)
+            {
+
+                pathAux = path + "/" + to_string(andarInt) + to_string(nivel) + ".bmp";
+                GridBitmap data = ReadBMP(path);
+                if(nivel == 0)
+                    andar.inferior = data;
+                else
+                    andar.superior = data;
+            }
+            andarInt++;
+            mapa.andares.push_back(andar);
+        }
+
+    }catch(const exception e)
+    {
+        return mapa;
+    }
 
 
 

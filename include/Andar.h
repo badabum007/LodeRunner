@@ -8,12 +8,11 @@ class Andar
         Andar();
         Andar(GridBitmap superior, GridBitmap inferior);
 
-        GridBitmap Getsuperior() { return superior; }
-        GridBitmap Getinferior() { return inferior; }
-    protected:
-    private:
         GridBitmap superior;
         GridBitmap inferior;
+    protected:
+    private:
+
 };
 
 #endif // ANDAR_H

@@ -1,9 +1,9 @@
-#include "GridBitmap.h"
-#include "Color.h"
+#include "../include/GridBitmap.h"
+#include "../include/Color.h"
 
 using namespace std;
 
-GridBitmap::GridBitmap(vector<GridBitmap> grid)
+GridBitmap::GridBitmap(vector<vector<Color>> grid)
 {
     this->grid = grid;
 }
