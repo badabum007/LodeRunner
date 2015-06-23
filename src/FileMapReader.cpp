@@ -1,64 +1,66 @@
 #include "FileMapReader.h"
+#include "bitmap.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <iostream>
 #include <string.h>
+
+using namespace std;
 
 
 FileMapReader::FileMapReader()
 {
 }
 
-char intToStr(int a)
-{
-    switch(a)
-    {
-        case 1: return '1';
-        case 2: return '2';
-        case 3: return '3';
-        case 4: return '4';
-        case 5: return '5';
-        case 6: return '6';
-        case 7: return '7';
-        case 8: return '8';
-        case 9: return '9';
-        case 10: return '10';
-        default: return -1;
 
+unsigned char* ReadBMP(char* filename)
+{
+    int i;
+    FILE* f = fopen(filename, "rb");
+
+    if(f == NULL)
+        throw "Argument Exception";
+
+    unsigned char info[54];
+    fread(info, sizeof(unsigned char), 54, f); // read the 54-byte header
+
+    // extract image height and width from header
+    int width = *(int*)&info[18];
+    int height = *(int*)&info[22];
+
+   /* cout << endl;
+    cout << "  Name: " << filename << endl;
+    cout << " Width: " << width << endl;
+    cout << "Height: " << height << endl;*/
+
+    int row_padded = (width*3 + 3) & (~3);
+    unsigned char* data = new unsigned char[row_padded];
+    unsigned char tmp;
+
+    for(int i = 0; i < height; i++)
+    {
+        fread(data, sizeof(unsigned char), row_padded, f);
+        for(int j = 0; j < width*3; j += 3)
+        {
+            // Convert (B, G, R) to (R, G, B)
+            tmp = data[j];
+            data[j] = data[j+2];
+            data[j+2] = tmp;
+
+           // cout << "R: "<< (int)data[j] << " G: " << (int)data[j+1]<< " B: " << (int)data[j+2]<< endl;
+        }
     }
 
+    fclose(f);
+    return data;
 }
 
-
-GridBitmap* generateMapBitmap(char* path)
+GridBitmap* FileMapReader::generateMapBitmap(char* path)
 {
-   FILE* arq;
-    char pathaux[200];
-    int andar = 1;
-    int grid = 0;
-    int i, j;
-    char aux;
-
-    do
-    {
-        strcat(pathaux, path);
-        aux = intToStr(andar);
-        strcat(pathaux, &aux);
-        aux = intToStr(grid);
-        strcat(pathaux, &aux);
-        strcat(pathaux, ".bmp");
-        arq = fopen(pathaux, "rb");
-        for(i=0;i<GRID_HEIGHT;i++)
-        {
-            for(j-0;j<GRID_WIDTH;j++)
-            {
+    unsigned char* data = ReadBMP(path);
 
 
-            }
-        }
 
-    }while(arq != NULL);
-
-    return NULL;
 
 }
 

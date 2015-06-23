@@ -1,9 +1,11 @@
 #include "GridBitmap.h"
 #include "Color.h"
 
-GridBitmap::GridBitmap(Color** grid)
+using namespace std;
+
+GridBitmap::GridBitmap(vector<GridBitmap> grid)
 {
-    this->gridAux = grid;
+    this->grid = grid;
 }
 
 GridBitmap::GridBitmap()

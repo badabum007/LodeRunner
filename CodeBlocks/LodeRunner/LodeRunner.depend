@@ -595,7 +595,7 @@
 	<GL/glut.h>
 	<math.h>
 
-1435030083 source:c:\users\usuario\desktop\fcg\loderunner\src\main.cpp
+1435081665 source:c:\users\usuario\desktop\fcg\loderunner\src\main.cpp
 	<windows.h>
 	<stdio.h>
 	<stdlib.h>
@@ -603,6 +603,7 @@
 	<cmath>
 	<iostream>
 	<gl/glut.h>
+	"FileMapReader.h"
 	"../CodeBlocks/include/al/alut.h"
 	"bitmap.h"
 	"3DObject.h"
@@ -629,12 +630,13 @@
 1435035976 c:\users\usuario\desktop\fcg\loderunner\src\color.h
 	<stdint.h>
 
-1435034723 source:c:\users\usuario\desktop\fcg\loderunner\src\gridbitmap.cpp
+1435080731 source:c:\users\usuario\desktop\fcg\loderunner\src\gridbitmap.cpp
 	"GridBitmap.h"
 	"Color.h"
 
-1435034715 c:\users\usuario\desktop\fcg\loderunner\src\gridbitmap.h
+1435081067 c:\users\usuario\desktop\fcg\loderunner\src\gridbitmap.h
 	"Color.h"
+	"vector"
 
 1435034734 source:c:\users\usuario\desktop\fcg\loderunner\src\andar.cpp
 	"Andar.h"
@@ -642,13 +644,15 @@
 1435034465 c:\users\usuario\desktop\fcg\loderunner\src\andar.h
 	"GridBitmap.h"
 
-1435036774 source:c:\users\usuario\desktop\fcg\loderunner\src\filemapreader.cpp
+1435084608 source:c:\users\usuario\desktop\fcg\loderunner\src\filemapreader.cpp
 	"FileMapReader.h"
+	"bitmap.h"
 	<stdlib.h>
 	<stdio.h>
+	<iostream>
 	<string.h>
 
-1435036025 c:\users\usuario\desktop\fcg\loderunner\src\filemapreader.h
+1435081647 c:\users\usuario\desktop\fcg\loderunner\src\filemapreader.h
 	<string.h>
 	<stdlib.h>
 	"GridBitmap.h"

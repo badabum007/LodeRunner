@@ -10,11 +10,11 @@ class FileMapReader
 {
     public:
         FileMapReader();
-        char* path;
+        static GridBitmap* generateMapBitmap(char* path);
 
 };
 
-GridBitmap* generateMapBitmap(char* path);
+
 
 
 

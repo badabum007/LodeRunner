@@ -1,11 +1,17 @@
 #ifndef GRIDBITMAP_H
 #define GRIDBITMAP_H
 
+using namespace std;
+
+
 #include "Color.h"
+#include "vector"
 #define GRID_HEIGHT 16
 #define GRID_WIDTH 16
 
-enum class objColor
+
+
+/*enum class objColor
 {
     Principal,
     Inimigo,
@@ -15,19 +21,18 @@ enum class objColor
     Escada,
     Vazio
 
-};
+};*/
 
 class GridBitmap
 {
-    public:
+public:
         GridBitmap();
-        GridBitmap(Color** grid);
+        GridBitmap(vector<GridBitmap> grid);
 
 
-        Color grid[GRID_HEIGHT][GRID_WIDTH];
+        vector<GridBitmap> grid;
     protected:
     private:
-        Color** gridAux;
 };
 
 #endif // GRIDBITMAP_H

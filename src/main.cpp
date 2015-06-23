@@ -28,6 +28,7 @@ seja uma spotlight;
 #include <cmath>
 #include <iostream>
 #include <gl/glut.h>
+#include "FileMapReader.h"
 
 //openal (sound lib)
 #include "../CodeBlocks/include/al/alut.h"
@@ -712,6 +713,8 @@ void mainIdle() {
 }
 
 int main(int argc, char **argv) {
+
+    FileMapReader::generateMapBitmap("C:/Users/Usuario/Desktop/teste.bmp");
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
 	glutInitWindowSize(windowWidth,windowHeight);
