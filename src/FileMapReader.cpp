@@ -32,10 +32,11 @@ GridBitmap ReadBMP(std::string filename)
 {
     int i;
     GridBitmap grid;
-    FILE* f = fopen(filename.c_str(), "rb");
+    const char* str  = filename.c_str();
+    FILE* f = fopen(str, "rb");
 
     if(f == NULL)
-        throw "Argument Exception";
+        throw exception();
 
     unsigned char info[54];
     fread(info, sizeof(unsigned char), 54, f); // read the 54-byte header
@@ -89,9 +90,9 @@ Mapa FileMapReader::generateMapBitmap(std::string path)
              Andar andar;
             for(nivel=0;nivel<2;nivel++)
             {
-
+                //pathAux = "C:/Users/Usuario/Desktop/mapas/10.bmp";
                 pathAux = path + "/" + to_string(andarInt) + to_string(nivel) + ".bmp";
-                GridBitmap data = ReadBMP(path);
+                GridBitmap data = ReadBMP(pathAux);
                 if(nivel == 0)
                     andar.inferior = data;
                 else
@@ -101,12 +102,12 @@ Mapa FileMapReader::generateMapBitmap(std::string path)
             mapa.andares.push_back(andar);
         }
 
-    }catch(const exception e)
+    }catch(const exception& e)
     {
-        return mapa;
+
     }
 
-
+    return mapa;
 
 
 }
