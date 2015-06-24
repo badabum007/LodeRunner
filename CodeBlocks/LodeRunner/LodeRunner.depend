@@ -595,7 +595,7 @@
 	<GL/glut.h>
 	<math.h>
 
-1435112639 source:c:\users\usuario\desktop\fcg\loderunner\src\main.cpp
+1435117539 source:c:\users\usuario\desktop\fcg\loderunner\src\main.cpp
 	<windows.h>
 	<stdio.h>
 	<stdlib.h>
@@ -644,7 +644,7 @@
 1435092758 c:\users\usuario\desktop\fcg\loderunner\src\andar.h
 	"GridBitmap.h"
 
-1435114389 source:c:\users\usuario\desktop\fcg\loderunner\src\filemapreader.cpp
+1435115851 source:c:\users\usuario\desktop\fcg\loderunner\src\filemapreader.cpp
 	"../include/FileMapReader.h"
 	"../include/bitmap.h"
 	<stdlib.h>
@@ -652,8 +652,8 @@
 	<iostream>
 	<string.h>
 	<sstream>
-	"../include/Mapa.h"
-	"../include/Andar.h"
+	"../include/MapaBitmap.h"
+	"../include/AndarBitmap.h"
 
 1435092758 c:\users\usuario\desktop\fcg\loderunner\src\filemapreader.h
 	<string.h>
@@ -678,12 +678,12 @@
 1435092758 c:\users\usuario\desktop\fcg\loderunner\include\color.h
 	<stdint.h>
 
-1435094013 c:\users\usuario\desktop\fcg\loderunner\include\filemapreader.h
+1435115851 c:\users\usuario\desktop\fcg\loderunner\include\filemapreader.h
 	<string.h>
 	<string>
 	<stdlib.h>
 	"GridBitmap.h"
-	"Mapa.h"
+	"MapaBitmap.h"
 
 1435092758 c:\users\usuario\desktop\fcg\loderunner\include\bitmap.h
 	<GL/glut.h>
@@ -698,4 +698,47 @@
 	<GLUT/glut.h>
 	<GL/gl.h>
 	<GL/glut.h>
+
+1435115795 source:c:\users\usuario\desktop\fcg\loderunner\src\andarbitmap.cpp
+	"../include/AndarBitmap.h"
+
+1435115795 c:\users\usuario\desktop\fcg\loderunner\include\andarbitmap.h
+	"GridBitmap.h"
+
+1435115851 c:\users\usuario\desktop\fcg\loderunner\include\mapabitmap.h
+	"vector"
+	"AndarBitmap.h"
+
+1435115851 source:c:\users\usuario\desktop\fcg\loderunner\src\mapabitmap.cpp
+	"../include/MapaBitmap.h"
+
+1435119011 source:c:\users\usuario\desktop\fcg\loderunner\src\bloco.cpp
+	"../include/Bloco.h"
+	"../include/ObjEnum.h"
+
+1435118952 c:\users\usuario\desktop\fcg\loderunner\include\bloco.h
+	<iostream>
+	<vector>
+	"ObjEnum.h"
+
+1435119107 c:\users\usuario\desktop\fcg\loderunner\include\objenum.h
+
+1435120101 source:c:\users\usuario\desktop\fcg\loderunner\src\personagem.cpp
+	"../include/Personagem.h"
+	"../include/ObjEnum.h"
+
+1435119604 c:\users\usuario\desktop\fcg\loderunner\include\personagem.h
+	<iostream>
+	<vector>
+	"../include/ObjEnum.h"
+	<random>
+	<chrono>
+	<algorithm>
+
+1435120238 source:c:\users\usuario\desktop\fcg\loderunner\src\objeto.cpp
+	"../include/Objeto.h"
+
+1435120258 c:\users\usuario\desktop\fcg\loderunner\include\objeto.h
+	<iostream>
+	<vector>
 

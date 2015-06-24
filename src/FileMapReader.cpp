@@ -6,8 +6,8 @@
 #include <string.h>
 #include <sstream>
 
-#include "../include/Mapa.h"
-#include "../include/Andar.h"
+#include "../include/MapaBitmap.h"
+#include "../include/AndarBitmap.h"
 
 
 FileMapReader::FileMapReader()
@@ -74,31 +74,31 @@ GridBitmap* ReadBMP(std::string filename)
     return grid;
 }
 
-Mapa FileMapReader::generateMapBitmap(std::string path)
+MapaBitmap FileMapReader::generateMapBitmap(std::string path)
 {
-    int andarInt=1;
+    int AndarBitmapInt=1;
     int nivel=0;
     std::string pathAux;
-    Mapa mapa;
+    MapaBitmap MapaBitmap;
 
 
     try
     {
         while(true)
         {
-             Andar andar;
+             AndarBitmap AndarBitmap;
             for(nivel=0;nivel<2;nivel++)
             {
-                //pathAux = "C:/Users/Usuario/Desktop/mapas/10.bmp";
-                pathAux = path + "/" + to_string(andarInt) + to_string(nivel) + ".bmp";
+                //pathAux = "C:/Users/Usuario/Desktop/MapaBitmaps/10.bmp";
+                pathAux = path + "/" + to_string(AndarBitmapInt) + to_string(nivel) + ".bmp";
                 GridBitmap* data = ReadBMP(pathAux);
                 if(nivel == 0)
-                    andar.inferior = data;
+                    AndarBitmap.inferior = data;
                 else
-                    andar.superior = data;
+                    AndarBitmap.superior = data;
             }
-            andarInt++;
-            mapa.andares.push_back(andar);
+            AndarBitmapInt++;
+            MapaBitmap.AndarBitmapes.push_back(AndarBitmap);
         }
 
     }catch(const std::exception& e)
@@ -106,7 +106,7 @@ Mapa FileMapReader::generateMapBitmap(std::string path)
 
     }
 
-    return mapa;
+    return MapaBitmap;
 
 
 }

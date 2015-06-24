@@ -11,7 +11,7 @@ Tarefas:
 
 1 - Adicionar neblina à cena ao implementar a função enableFog() com os parâmetros de habilitação
 de fog na OpenGL;
-2 - Usar uma imagem no formato BMP como mapa pra posicionar objetos 3D na cena. Use a cor de cada
+2 - Usar uma imagem no formato BMP como MapaBitmap pra posicionar objetos 3D na cena. Use a cor de cada
 pixel para definir qual o modelo será colocado, e a posição do pixel para definir a posição do
 modelo no espaço. Pixels pretos não representam nenhum modelo, a posição fica vazia na cena;
 3 - Mudar as configurações da fonte de luz da cena, já implementada no código base dado, para que
@@ -118,7 +118,7 @@ float posY = 0.0f;
 float posZ = 2.0f;
 
 /*
-variavel auxiliar pra dar variação na altura do ponto de vista ao andar.
+variavel auxiliar pra dar variação na altura do ponto de vista ao AndarBitmap.
 */
 float headPosAux = 0.0f;
 
@@ -259,7 +259,7 @@ void mainInit() {
 
 	enableFog();
 
-	printf("w - andar \n");
+	printf("w - AndarBitmap \n");
 	printf("s - ir pra tras \n");
 	printf("mouse - direcao \n");
 	printf("r - correr \n");
@@ -450,6 +450,7 @@ void renderFloor() {
         }
     }
 
+
 	glDisable(type);
 
 
@@ -491,7 +492,7 @@ void updateState() {
 			speedZ = -0.05 * cos(roty*PI/180);
 		}
 
-		// efeito de "sobe e desce" ao andar
+		// efeito de "sobe e desce" ao AndarBitmap
 		headPosAux += 8.5f;
 		if (headPosAux > 180.0f) {
 			headPosAux = 0.0f;
@@ -506,7 +507,7 @@ void updateState() {
         }
 
 	} else {
-		// parou de andar, para com o efeito de "sobe e desce"
+		// parou de AndarBitmap, para com o efeito de "sobe e desce"
 		headPosAux = fmod(headPosAux, 90) - 1 * headPosAux / 90;
 		headPosAux -= 4.0f;
 		if (headPosAux < 0.0f) {
@@ -712,9 +713,12 @@ void mainIdle() {
 	glutPostRedisplay();
 }
 
+
+
 int main(int argc, char **argv) {
 
-    FileMapReader::generateMapBitmap("C:/Users/Usuario/Desktop/mapas");
+
+    //FileMapReader::generateMapBitmap("C:/Users/Usuario/Desktop/MapaBitmaps");
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
 	glutInitWindowSize(windowWidth,windowHeight);
@@ -743,6 +747,7 @@ int main(int argc, char **argv) {
 	glutKeyboardUpFunc(onKeyUp);
 
 	mainInit();
+
 
 	glutMainLoop();
 
