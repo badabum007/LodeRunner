@@ -1,9 +1,8 @@
 #include "../include/GridBitmap.h"
 #include "../include/Color.h"
 
-using namespace std;
 
-GridBitmap::GridBitmap(vector<vector<Color>> grid)
+GridBitmap::GridBitmap(std::vector<std::vector<Color>> grid)
 {
     this->grid = grid;
 }

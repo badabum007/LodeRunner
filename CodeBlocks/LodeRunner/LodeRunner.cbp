@@ -16,6 +16,7 @@
 					<Add option="-g" />
 					<Add directory="../include" />
 					<Add directory="src" />
+					<Add directory="include" />
 				</Compiler>
 				<Linker>
 					<Add library="..\lib\OpenGL32.Lib" />
@@ -35,6 +36,7 @@
 					<Add option="-O2" />
 					<Add directory="../include" />
 					<Add directory="src" />
+					<Add directory="include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -56,24 +58,26 @@
 			<Add library="..\lib\EFX-Util.lib" />
 			<Add library="..\lib\alut.lib" />
 		</Linker>
+		<Unit filename="../../include/3DObject.h" />
+		<Unit filename="../../include/Andar.h" />
+		<Unit filename="../../include/Color.h" />
+		<Unit filename="../../include/FileMapReader.h" />
+		<Unit filename="../../include/GridBitmap.h" />
+		<Unit filename="../../include/Mapa.h" />
+		<Unit filename="../../include/Texture.h" />
+		<Unit filename="../../include/bitmap.h" />
+		<Unit filename="../../include/glm.h" />
 		<Unit filename="../../src/3DObject.cpp" />
-		<Unit filename="../../src/3DObject.h" />
 		<Unit filename="../../src/Andar.cpp" />
-		<Unit filename="../../src/Andar.h" />
 		<Unit filename="../../src/Color.cpp" />
-		<Unit filename="../../src/Color.h" />
 		<Unit filename="../../src/FileMapReader.cpp" />
-		<Unit filename="../../src/FileMapReader.h" />
 		<Unit filename="../../src/GridBitmap.cpp" />
-		<Unit filename="../../src/GridBitmap.h" />
+		<Unit filename="../../src/Mapa.cpp" />
 		<Unit filename="../../src/Texture.cpp" />
-		<Unit filename="../../src/Texture.h" />
 		<Unit filename="../../src/bitmap.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="../../src/bitmap.h" />
 		<Unit filename="../../src/glm.cpp" />
-		<Unit filename="../../src/glm.h" />
 		<Unit filename="../../src/glmimg.cpp" />
 		<Unit filename="../../src/main.cpp" />
 		<Extensions>

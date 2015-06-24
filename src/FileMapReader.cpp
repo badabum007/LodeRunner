@@ -9,8 +9,6 @@
 #include "../include/Mapa.h"
 #include "../include/Andar.h"
 
-using namespace std;
-
 
 FileMapReader::FileMapReader()
 {
@@ -28,15 +26,15 @@ std::string to_string(int value)
       return os.str() ;
     }
 
-GridBitmap ReadBMP(std::string filename)
+GridBitmap* ReadBMP(std::string filename)
 {
     int i;
-    GridBitmap grid;
+    GridBitmap* grid = new GridBitmap();
     const char* str  = filename.c_str();
     FILE* f = fopen(str, "rb");
 
     if(f == NULL)
-        throw exception();
+        throw std::exception();
 
     unsigned char info[54];
     fread(info, sizeof(unsigned char), 54, f); // read the 54-byte header
@@ -64,11 +62,12 @@ GridBitmap ReadBMP(std::string filename)
             tmp = data[j];
             data[j] = data[j+2];
             data[j+2] = tmp;
-            Color cor = Color(data[j], data[j+1], data[j+2]);
+            //Color cor = Color((uint8_t) data[j], (uint8_t) data[j+1], (uint8_t) data[j+2]);
+            Color cor;
             linha.push_back(cor);
-           // cout << "R: "<< (int)data[j] << " G: " << (int)data[j+1]<< " B: " << (int)data[j+2]<< endl;
+             std::cout << "R: "<< (int)data[j] << " G: " << (int)data[j+1]<< " B: " << (int)data[j+2]<< std::endl;
         }
-        grid.grid.push_back(linha);
+        grid->grid.push_back(linha);
     }
 
     fclose(f);
@@ -92,7 +91,7 @@ Mapa FileMapReader::generateMapBitmap(std::string path)
             {
                 //pathAux = "C:/Users/Usuario/Desktop/mapas/10.bmp";
                 pathAux = path + "/" + to_string(andarInt) + to_string(nivel) + ".bmp";
-                GridBitmap data = ReadBMP(pathAux);
+                GridBitmap* data = ReadBMP(pathAux);
                 if(nivel == 0)
                     andar.inferior = data;
                 else
@@ -102,7 +101,7 @@ Mapa FileMapReader::generateMapBitmap(std::string path)
             mapa.andares.push_back(andar);
         }
 
-    }catch(const exception& e)
+    }catch(const std::exception& e)
     {
 
     }

@@ -714,8 +714,7 @@ void mainIdle() {
 
 int main(int argc, char **argv) {
 
-    std::string path = "C:/Users/Usuario/Desktop/mapas";
-    Mapa MAPA = FileMapReader::generateMapBitmap(path);
+    FileMapReader::generateMapBitmap("C:/Users/Usuario/Desktop/mapas");
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
 	glutInitWindowSize(windowWidth,windowHeight);

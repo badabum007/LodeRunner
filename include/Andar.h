@@ -6,10 +6,10 @@ class Andar
 {
     public:
         Andar();
-        Andar(GridBitmap superior, GridBitmap inferior);
+        Andar(GridBitmap* superior, GridBitmap* inferior);
 
-        GridBitmap superior;
-        GridBitmap inferior;
+        GridBitmap* superior;
+        GridBitmap* inferior;
     protected:
     private:
 
