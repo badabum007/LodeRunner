@@ -59,13 +59,13 @@
 			<Add library="..\lib\alut.lib" />
 		</Linker>
 		<Unit filename="../../include/3DObject.h" />
-		<Unit filename="../../include/AndarBitmap.h" />
+		<Unit filename="../../include/Andar.h" />
 		<Unit filename="../../include/Bloco.h" />
 		<Unit filename="../../include/Camera.h" />
 		<Unit filename="../../include/Color.h" />
 		<Unit filename="../../include/FileMapReader.h" />
 		<Unit filename="../../include/GridBitmap.h" />
-		<Unit filename="../../include/MapaBitmap.h" />
+		<Unit filename="../../include/Mapa.h" />
 		<Unit filename="../../include/ObjEnum.h" />
 		<Unit filename="../../include/Objeto.h" />
 		<Unit filename="../../include/Personagem.h" />
@@ -74,13 +74,13 @@
 		<Unit filename="../../include/bitmap.h" />
 		<Unit filename="../../include/glm.h" />
 		<Unit filename="../../src/3DObject.cpp" />
-		<Unit filename="../../src/AndarBitmap.cpp" />
+		<Unit filename="../../src/Andar.cpp" />
 		<Unit filename="../../src/Bloco.cpp" />
 		<Unit filename="../../src/Camera.cpp" />
 		<Unit filename="../../src/Color.cpp" />
 		<Unit filename="../../src/FileMapReader.cpp" />
 		<Unit filename="../../src/GridBitmap.cpp" />
-		<Unit filename="../../src/MapaBitmap.cpp" />
+		<Unit filename="../../src/Mapa.cpp" />
 		<Unit filename="../../src/Objeto.cpp" />
 		<Unit filename="../../src/Personagem.cpp" />
 		<Unit filename="../../src/Point3D.cpp" />

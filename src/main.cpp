@@ -39,6 +39,7 @@ seja uma spotlight;
 #include <list>
 #include "../include/FileMapReader.h"
 #include "../include/Personagem.h"
+#include "../include/Bloco.h"
 //openal (sound lib)
 #include "../CodeBlocks/include/al/alut.h"
 
@@ -193,7 +194,10 @@ float backgrundColor[4] = {0.0f,0.0f,0.0f,1.0f};
 C3DObject cObj, personagem;
 
 list<Personagem*> inimigos;
-Mapa* mapa = new Mapa();
+list<Bloco*> blocos;
+Mapa* mapa;
+map<std::pair<int,int>, Bloco*> blocosMap;
+
 
 
 //CModelAl modelAL;
@@ -250,6 +254,42 @@ void initLight() {
 
 }
 
+
+void initMapa()
+{
+
+    for(Andar andar : mapa->andares)
+    {
+
+        for(i=0; i<andar.inferior->grid.size(); i++)
+        {
+
+            for(int j=0; j<andar.inferior->grid[i].size(); j++)
+            {
+                    //std::cout << "AAAAAAAAAAAAAAAAAAAAAAA";
+                    Bloco* b = new Bloco(std::make_pair(i,j));
+                    blocos.push_back(b);
+                  /*  cObj.Init();
+                    cObj.Load("../../models/crate.obj");*/
+                    glPushMatrix();
+                    glPushMatrix();
+                    glScalef(0.3,0.3,0.3);
+                    glTranslatef(0.0 + 2*i,-2,0.0 + 2*j);
+                    cObj.Draw(SMOOTH_MATERIAL_TEXTURE); // use SMOOTH for obj files, SMOOTH_MATERIAL for obj+mtl files and SMOOTH_MATERIAL_TEXTURE for obj+mtl+tga files
+                    glPopMatrix();
+                    /*glTranslatef(10, 0.6f, 10);
+                    glRotatef(90,1.0,0.0,0.0);
+                    glScalef(0.75,0.75,0.75);*/
+                    //cObj.Draw(SMOOTH_MATERIAL_TEXTURE);
+                    glPopMatrix();
+
+            }
+        }
+
+
+    }
+}
+
 void setViewport(GLint left, GLint right, GLint bottom, GLint top) {
 	glViewport(left, bottom, right - left, top - bottom);
 }
@@ -259,6 +299,7 @@ void setViewport(GLint left, GLint right, GLint bottom, GLint top) {
 Initialize
 */
 void mainInit() {
+
 	glClearColor(1.0,1.0,1.0,0.0);
 	glColor3f(0.0f,0.0f,0.0f);
 	setWindow();
@@ -277,13 +318,18 @@ void mainInit() {
 
     initTexture();
 
+
+    initMapa();
+
 	initModel();
+
+
 
 	initLight();
 
 	enableFog();
 
-	printf("w - AndarBitmap \n");
+	printf("w - Andar \n");
 	printf("s - ir pra tras \n");
 	printf("mouse - direcao \n");
 	printf("r - correr \n");
@@ -490,16 +536,18 @@ void renderScene() {
 
 	updateCam();
 
-    glPushMatrix();
+    /*glPushMatrix();
     glScalef(0.3,0.3,0.3);
     glTranslatef(0.0,-0.9,0.0);
 	cObj.Draw(SMOOTH_MATERIAL_TEXTURE); // use SMOOTH for obj files, SMOOTH_MATERIAL for obj+mtl files and SMOOTH_MATERIAL_TEXTURE for obj+mtl+tga files
-	glPopMatrix();
+	glPopMatrix();*/
 
     // sets the bmp file already loaded to the OpenGL parameters
     setTextureToOpengl();
 //    renderCube(new Point3D(0,0,0));
-	renderFloor();
+
+    initMapa();
+	//renderFloor();
 
 	//modelAL.Translate(0.0f,1.0f,0.0f);
 	//modelAL.Draw();
@@ -542,9 +590,8 @@ void updateState() {
 
 	if(leftPressed)
     {
-
-       /* roty -= 90;
-        leftPressed = false;*/
+        roty -= 90;
+        leftPressed = false;
     }
     if(rightPressed)
     {
@@ -755,8 +802,6 @@ void mainIdle() {
 
 int main(int argc, char **argv) {
 
-
-    FileMapReader::generateMapBitmap("C:/Users/Usuario/Desktop/mapas");
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
 	glutInitWindowSize(windowWidth,windowHeight);
@@ -784,6 +829,8 @@ int main(int argc, char **argv) {
 	glutKeyboardFunc(onKeyDown);
 	glutKeyboardUpFunc(onKeyUp);
 
+
+    mapa = FileMapReader::generateMapBitmap("C:/Users/Usuario/Desktop/mapas");
 	mainInit();
 
 

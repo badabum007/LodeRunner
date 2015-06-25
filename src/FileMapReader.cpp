@@ -80,7 +80,7 @@ GridBitmap* ReadBMP(std::string filename)
                 linha.push_back(ObjEnum::VAZIO);
 
 
-             std::cout << "R: "<< (int)data[j] << " G: " << (int)data[j+1]<< " B: " << (int)data[j+2]<< std::endl;
+             //std::cout << "R: "<< (int)data[j] << " G: " << (int)data[j+1]<< " B: " << (int)data[j+2]<< std::endl;
         }
         grid->grid.push_back(linha);
     }
@@ -89,12 +89,12 @@ GridBitmap* ReadBMP(std::string filename)
     return grid;
 }
 
-Mapa FileMapReader::generateMapBitmap(std::string path)
+Mapa* FileMapReader::generateMapBitmap(std::string path)
 {
     int AndarBitmapInt=1;
     int nivel=0;
     std::string pathAux;
-    Mapa MapaBitmap;
+    Mapa* MapaBitmap = new Mapa();
 
 
     try
@@ -113,7 +113,7 @@ Mapa FileMapReader::generateMapBitmap(std::string path)
                     AndarBitmap.superior = data;
             }
             AndarBitmapInt++;
-            MapaBitmap.andares.push_back(AndarBitmap);
+            MapaBitmap->andares.push_back(AndarBitmap);
         }
 
     }catch(const std::exception& e)

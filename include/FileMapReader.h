@@ -12,7 +12,7 @@ class FileMapReader
 {
     public:
         FileMapReader();
-        static Mapa generateMapBitmap(std::string path);
+        static Mapa* generateMapBitmap(std::string path);
 
 };
 
