@@ -14,10 +14,11 @@ class Bloco
         Bloco(std::pair<int,int> matrixPosition);
         void destroi();
 
+
     protected:
     private:
         std::pair<int,int> matrixPosition;
-        BlockEnum tipo;
+        ObjEnum tipo;
         bool isDestroying;
 };
 

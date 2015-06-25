@@ -12,16 +12,4 @@ enum class ObjEnum
     VAZIO
 };
 
-enum class BlockEnum
-{
-    DESTRUTIVEL,
-    INDESTRUTIVEL
-};
-
-enum PersEnum
-{
-    PRINCIPAL,
-    INIMIGO
-};
-
 #endif // OBJENUM_H_INCLUDED

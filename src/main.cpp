@@ -20,16 +20,25 @@ seja uma spotlight;
 */
 
 
-#include <windows.h>
 
+#include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
+//#include <math.h>
 #include <cmath>
+#include <ctime>
+#include <cstring>
 #include <iostream>
 #include <gl/glut.h>
+#include <string>
+#include <chrono>
+#include <algorithm>
+/// STL INCLUSIONS
+#include <vector>
+#include <map>
+#include <list>
 #include "../include/FileMapReader.h"
-
+#include "../include/Personagem.h"
 //openal (sound lib)
 #include "../CodeBlocks/include/al/alut.h"
 
@@ -41,6 +50,7 @@ seja uma spotlight;
 
 //handle generic obj models
 #include "../include/3DObject.h"
+#include "../include/Point3D.h"
 
 #pragma comment(lib, "OpenAL32.lib")
 #pragma comment(lib, "alut.lib")
@@ -55,6 +65,16 @@ seja uma spotlight;
 #define SMOOTH 0
 #define SMOOTH_MATERIAL 1
 #define SMOOTH_MATERIAL_TEXTURE 2
+
+#define NUM_INIMIGOS 5
+
+
+using std::vector;
+using std::map;
+using std::list;
+
+using namespace std::chrono;
+
 
 void mainInit();
 void initSound();
@@ -170,7 +190,11 @@ float posYOffset = 0.2;
 
 float backgrundColor[4] = {0.0f,0.0f,0.0f,1.0f};
 
-C3DObject cObj;
+C3DObject cObj, personagem;
+
+list<Personagem*> inimigos;
+
+
 
 //CModelAl modelAL;
 
@@ -271,7 +295,7 @@ void mainInit() {
 void initModel() {
 	printf("Loading models.. \n");
 	cObj.Init();
-	cObj.Load("ball.obj");
+	cObj.Load("../../models/crate.obj");
 	//modelAL = CModelAl();
 	//modelAL.Init();
 	printf("Models ok. \n \n \n");
@@ -467,13 +491,14 @@ void renderScene() {
 	updateCam();
 
     glPushMatrix();
-    glTranslatef(0.0,1.0,0.0);
+    glScalef(0.3,0.3,0.3);
+    glTranslatef(0.0,-0.9,0.0);
 	cObj.Draw(SMOOTH_MATERIAL_TEXTURE); // use SMOOTH for obj files, SMOOTH_MATERIAL for obj+mtl files and SMOOTH_MATERIAL_TEXTURE for obj+mtl+tga files
 	glPopMatrix();
 
     // sets the bmp file already loaded to the OpenGL parameters
     setTextureToOpengl();
-
+//    renderCube(new Point3D(0,0,0));
 	renderFloor();
 
 	//modelAL.Translate(0.0f,1.0f,0.0f);

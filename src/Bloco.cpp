@@ -13,6 +13,6 @@ Bloco::Bloco(std::pair<int, int> matrixPosition)
 
 void Bloco::destroi()
 {
-    if(this->tipo == BlockEnum::INDESTRUTIVEL)
+    if(this->tipo != ObjEnum::BLOCODEST)
         return;
 }

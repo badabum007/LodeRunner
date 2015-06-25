@@ -595,18 +595,27 @@
 	<GL/glut.h>
 	<math.h>
 
-1435117539 source:c:\users\usuario\desktop\fcg\loderunner\src\main.cpp
+1435200030 source:c:\users\usuario\desktop\fcg\loderunner\src\main.cpp
 	<windows.h>
 	<stdio.h>
 	<stdlib.h>
-	<math.h>
 	<cmath>
+	<ctime>
+	<cstring>
 	<iostream>
 	<gl/glut.h>
+	<string>
+	<chrono>
+	<algorithm>
+	<vector>
+	<map>
+	<list>
 	"../include/FileMapReader.h"
+	"../include/Personagem.h"
 	"../CodeBlocks/include/al/alut.h"
 	"../include/bitmap.h"
 	"../include/3DObject.h"
+	"../include/Point3D.h"
 
 1435092758 c:\users\usuario\desktop\fcg\loderunner\codeblocks\include\al\alut.h
 	<al/alc.h>
@@ -712,16 +721,16 @@
 1435115851 source:c:\users\usuario\desktop\fcg\loderunner\src\mapabitmap.cpp
 	"../include/MapaBitmap.h"
 
-1435119011 source:c:\users\usuario\desktop\fcg\loderunner\src\bloco.cpp
+1435197866 source:c:\users\usuario\desktop\fcg\loderunner\src\bloco.cpp
 	"../include/Bloco.h"
 	"../include/ObjEnum.h"
 
-1435118952 c:\users\usuario\desktop\fcg\loderunner\include\bloco.h
+1435197867 c:\users\usuario\desktop\fcg\loderunner\include\bloco.h
 	<iostream>
 	<vector>
 	"ObjEnum.h"
 
-1435119107 c:\users\usuario\desktop\fcg\loderunner\include\objenum.h
+1435196143 c:\users\usuario\desktop\fcg\loderunner\include\objenum.h
 
 1435120101 source:c:\users\usuario\desktop\fcg\loderunner\src\personagem.cpp
 	"../include/Personagem.h"
@@ -741,4 +750,20 @@
 1435120258 c:\users\usuario\desktop\fcg\loderunner\include\objeto.h
 	<iostream>
 	<vector>
+
+1435198234 source:c:\users\usuario\desktop\fcg\loderunner\src\camera.cpp
+	"../include/Camera.h"
+
+1435198270 c:\users\usuario\desktop\fcg\loderunner\include\camera.h
+	<gl/glu.h>
+	<gl/glut.h>
+	"../include/Point3D.h"
+
+1435199219 c:\users\usuario\desktop\fcg\loderunner\include\point3d.h
+	<gl/gl.h>
+	<cstdio>
+
+1435198329 source:c:\users\usuario\desktop\fcg\loderunner\src\point3d.cpp
+	"../include/Point3D.h"
+	<cmath>
 
