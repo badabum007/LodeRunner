@@ -193,7 +193,7 @@ float backgrundColor[4] = {0.0f,0.0f,0.0f,1.0f};
 C3DObject cObj, personagem;
 
 list<Personagem*> inimigos;
-
+Mapa* mapa = new Mapa();
 
 
 //CModelAl modelAL;
@@ -239,8 +239,8 @@ void initLight() {
 	glEnable( GL_LIGHT0 );
 
 	GLfloat light_ambient[] = { backgrundColor[0], backgrundColor[1], backgrundColor[2], backgrundColor[3] };
-	GLfloat light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
-	GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat light_diffuse[] = { 10.0, 10.0, 10.0, 10.0 };
+	GLfloat light_specular[] = { 10.0, 10.0, 10.0, 10.0 };
 	GLfloat light_position1[] = {0.0, 0.0, 0.0, 1.0 };
 
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
@@ -540,6 +540,18 @@ void updateState() {
 		}
 	}
 
+	if(leftPressed)
+    {
+
+       /* roty -= 90;
+        leftPressed = false;*/
+    }
+    if(rightPressed)
+    {
+        roty += 90;
+        rightPressed = false;
+    }
+
 	posY += speedY;
 	if (posY < heightLimit) {
 		posY = heightLimit;
@@ -547,6 +559,7 @@ void updateState() {
 		jumping = false;
 	} else {
 		speedY -= gravity;
+
 	}
 
 	if (crouched) {
@@ -743,7 +756,7 @@ void mainIdle() {
 int main(int argc, char **argv) {
 
 
-    //FileMapReader::generateMapBitmap("C:/Users/Usuario/Desktop/MapaBitmaps");
+    FileMapReader::generateMapBitmap("C:/Users/Usuario/Desktop/mapas");
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
 	glutInitWindowSize(windowWidth,windowHeight);

@@ -6,7 +6,7 @@
 
 #include "Color.h"
 #include <vector>
-#include "Color.h"
+#include "ObjEnum.h"
 #define GRID_HEIGHT 16
 #define GRID_WIDTH 16
 
@@ -28,10 +28,10 @@ class GridBitmap
 {
 public:
         GridBitmap();
-        GridBitmap(std::vector<std::vector<Color>> grid);
+        GridBitmap(std::vector<std::vector<ObjEnum>> grid);
 
 
-        std::vector<std::vector<Color>> grid;
+        std::vector<std::vector<ObjEnum>> grid;
     protected:
     private:
 };

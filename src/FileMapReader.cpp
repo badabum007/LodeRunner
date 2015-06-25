@@ -6,8 +6,8 @@
 #include <string.h>
 #include <sstream>
 
-#include "../include/MapaBitmap.h"
-#include "../include/AndarBitmap.h"
+#include "../include/Mapa.h"
+#include "../include/Andar.h"
 
 
 FileMapReader::FileMapReader()
@@ -54,7 +54,7 @@ GridBitmap* ReadBMP(std::string filename)
 
     for(int i = 0; i < height; i++)
     {
-        std::vector<Color> linha;
+        std::vector<ObjEnum> linha;
         fread(data, sizeof(unsigned char), row_padded, f);
         for(int j = 0; j < width*3; j += 3)
         {
@@ -62,9 +62,24 @@ GridBitmap* ReadBMP(std::string filename)
             tmp = data[j];
             data[j] = data[j+2];
             data[j+2] = tmp;
-            //Color cor = Color((uint8_t) data[j], (uint8_t) data[j+1], (uint8_t) data[j+2]);
-            Color cor;
-            linha.push_back(cor);
+            Color cor = Color((uint8_t) data[j], (uint8_t) data[j+1], (uint8_t) data[j+2]);
+
+            if(cor == PRINCIPAL_COLOR)
+                linha.push_back(ObjEnum::PRINCIPAL);
+            if(cor == INIMIGO_COLOR)
+                linha.push_back(ObjEnum::INIMIGO);
+            if(cor == BLOCOINDEST_COLOR)
+                linha.push_back(ObjEnum::BLOCOINDEST);
+            if(cor == BLOCODEST_COLOR)
+                linha.push_back(ObjEnum::BLOCODEST);
+            if(cor == OURO_COLOR)
+                linha.push_back(ObjEnum::OURO);
+            if(cor == ESCADA_COLOR)
+                linha.push_back(ObjEnum::ESCADA);
+            if(cor == VAZIO_COLOR)
+                linha.push_back(ObjEnum::VAZIO);
+
+
              std::cout << "R: "<< (int)data[j] << " G: " << (int)data[j+1]<< " B: " << (int)data[j+2]<< std::endl;
         }
         grid->grid.push_back(linha);
@@ -74,19 +89,19 @@ GridBitmap* ReadBMP(std::string filename)
     return grid;
 }
 
-MapaBitmap FileMapReader::generateMapBitmap(std::string path)
+Mapa FileMapReader::generateMapBitmap(std::string path)
 {
     int AndarBitmapInt=1;
     int nivel=0;
     std::string pathAux;
-    MapaBitmap MapaBitmap;
+    Mapa MapaBitmap;
 
 
     try
     {
         while(true)
         {
-             AndarBitmap AndarBitmap;
+             Andar AndarBitmap;
             for(nivel=0;nivel<2;nivel++)
             {
                 //pathAux = "C:/Users/Usuario/Desktop/MapaBitmaps/10.bmp";
@@ -98,7 +113,7 @@ MapaBitmap FileMapReader::generateMapBitmap(std::string path)
                     AndarBitmap.superior = data;
             }
             AndarBitmapInt++;
-            MapaBitmap.AndarBitmapes.push_back(AndarBitmap);
+            MapaBitmap.andares.push_back(AndarBitmap);
         }
 
     }catch(const std::exception& e)

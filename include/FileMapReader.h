@@ -5,14 +5,14 @@
 #include <string>
 #include <stdlib.h>
 #include "GridBitmap.h"
-#include "MapaBitmap.h"
+#include "Mapa.h"
 
 
 class FileMapReader
 {
     public:
         FileMapReader();
-        static MapaBitmap generateMapBitmap(std::string path);
+        static Mapa generateMapBitmap(std::string path);
 
 };
 
