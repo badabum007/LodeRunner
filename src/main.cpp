@@ -584,31 +584,32 @@ bool hacolisao (float floatX, float floatZ, int Y){
     case 0:
         return matrizMapa[X][Z-1][Y] != ObjEnum::VAZIO;
         break;
+    case 1:
+      return matrizMapa[X+1][Z-1][Y] != ObjEnum::VAZIO ||
+             matrizMapa[X+1][Z][Y] != ObjEnum::VAZIO;
+      break;
     case 2:
         return matrizMapa[X+1][Z][Y] != ObjEnum::VAZIO;
         break;
-   /* case 3:
+    case 3:
         return  matrizMapa[X+1][Z][Y] != ObjEnum::VAZIO ||
-                matrizMapa[X+1][Z+1][Y] != ObjEnum::VAZIO ||
-                matrizMapa[X][Z+1][Y] != ObjEnum::VAZIO;
-        break;*/
+                matrizMapa[X+1][Z+1][Y] != ObjEnum::VAZIO;
+        break;
     case 4:
         return matrizMapa[X][Z+1][Y] != ObjEnum::VAZIO;
         break;
-   /* case 5:
-        return matrizMapa[X][Z+1][Y] != ObjEnum::VAZIO ||
-                matrizMapa[X-1][Z+1][Y] != ObjEnum::VAZIO ||
-                matrizMapa[X-1][Z][Y] != ObjEnum::VAZIO;*/
+    case 5:
+        return matrizMapa[X-1][Z-1][Y] != ObjEnum::VAZIO ||
+                matrizMapa[X-1][Z][Y] != ObjEnum::VAZIO;
         break;
     case 6:
         X--;
         return  matrizMapa[X][Z+1][Y] != ObjEnum::VAZIO;
         break;
-  /*  case 7:
+    case 7:
         return matrizMapa[X-1][Z][Y] != ObjEnum::VAZIO ||
-                matrizMapa[X-1][Z-1][Y]!= ObjEnum::VAZIO ||
-                matrizMapa[X][Z-1][Y] != ObjEnum::VAZIO;
-        break;*/
+                matrizMapa[X-1][Z+1][Y]!= ObjEnum::VAZIO;
+        break;
 
     }
     return false;
@@ -1013,9 +1014,9 @@ int main(int argc, char **argv)
 	/**
 	Register mouse events handlers
 	*/
-	/*glutMouseFunc(onMouseButton);
+	glutMouseFunc(onMouseButton);
 	glutMotionFunc(onMouseMove);
-	glutPassiveMotionFunc(onMousePassiveMove);*/
+	glutPassiveMotionFunc(onMousePassiveMove);
 
 	/**
 	Register keyboard events handlers
