@@ -107,10 +107,7 @@ Mapa* FileMapReader::generateMapBitmap(std::string path)
                 //pathAux = "C:/Users/Usuario/Desktop/MapaBitmaps/10.bmp";
                 pathAux = path + "/" + to_string(AndarBitmapInt) + to_string(nivel) + ".bmp";
                 GridBitmap* data = ReadBMP(pathAux);
-                if(nivel == 0)
-                    AndarBitmap.inferior = data;
-                else
-                    AndarBitmap.superior = data;
+                AndarBitmap.andares[nivel] = *data;
             }
             AndarBitmapInt++;
             MapaBitmap->andares.push_back(AndarBitmap);

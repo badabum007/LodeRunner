@@ -1,6 +1,6 @@
-# Blender v2.67 (sub 1) OBJ File: 'Crate1.blend'
+# Blender v2.67 (sub 1) OBJ File: 'crate_1.blend'
 # www.blender.org
-mtllib Crate.mtl
+mtllib ouro.mtl
 o Cube_Cube.001
 v -1.000000 -1.000000 1.000000
 v -1.000000 -1.000000 -1.000000

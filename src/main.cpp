@@ -191,7 +191,7 @@ float posYOffset = 0.2;
 
 float backgrundColor[4] = {0.0f,0.0f,0.0f,1.0f};
 
-C3DObject cObj, personagem;
+C3DObject blocoIndest, blocoDest, ouro, personagem;
 
 list<Personagem*> inimigos;
 list<Bloco*> blocos;
@@ -261,30 +261,30 @@ void initMapa()
     for(Andar andar : mapa->andares)
     {
 
-        for(i=0; i<andar.inferior->grid.size(); i++)
+        for(int k=0;k<2;k++)
         {
-
-            for(int j=0; j<andar.inferior->grid[i].size(); j++)
+            for(i=0; i<andar.andares[k].grid.size(); i++)
             {
-                    //std::cout << "AAAAAAAAAAAAAAAAAAAAAAA";
-                    Bloco* b = new Bloco(std::make_pair(i,j));
-                    blocos.push_back(b);
-                  /*  cObj.Init();
-                    cObj.Load("../../models/crate.obj");*/
-                    glPushMatrix();
-                    glPushMatrix();
-                    glScalef(0.3,0.3,0.3);
-                    glTranslatef(0.0 + 2*i,-2,0.0 + 2*j);
-                    cObj.Draw(SMOOTH_MATERIAL_TEXTURE); // use SMOOTH for obj files, SMOOTH_MATERIAL for obj+mtl files and SMOOTH_MATERIAL_TEXTURE for obj+mtl+tga files
-                    glPopMatrix();
-                    /*glTranslatef(10, 0.6f, 10);
-                    glRotatef(90,1.0,0.0,0.0);
-                    glScalef(0.75,0.75,0.75);*/
-                    //cObj.Draw(SMOOTH_MATERIAL_TEXTURE);
-                    glPopMatrix();
 
+                for(int j=0; j<andar.andares[k].grid[i].size(); j++)
+                {
+                    if(andar.andares[k].grid[i][j] == ObjEnum::BLOCOINDEST)
+                    {
+                       Bloco* b = new Bloco(std::make_pair(i,j));
+                        blocos.push_back(b);
+                        glPushMatrix();
+                        glPushMatrix();
+                        glScalef(0.3,0.3,0.3);
+                        glTranslatef(0.0 + 2*i,-2 + 2*k,0.0 + 2*j);
+                        blocoIndest.Draw(SMOOTH_MATERIAL_TEXTURE);
+                        glPopMatrix();
+                        glPopMatrix();
+                    }
+                }
             }
         }
+
+
 
 
     }
@@ -340,10 +340,12 @@ void mainInit() {
 
 void initModel() {
 	printf("Loading models.. \n");
-	cObj.Init();
-	cObj.Load("../../models/crate.obj");
-	//modelAL = CModelAl();
-	//modelAL.Init();
+	blocoIndest.Init();
+	blocoIndest.Load("../../models/indestrutivel.obj");
+	blocoDest.Init();
+	blocoDest.Load("../../models/destrutivel.obj");
+
+
 	printf("Models ok. \n \n \n");
 }
 
@@ -539,7 +541,7 @@ void renderScene() {
     /*glPushMatrix();
     glScalef(0.3,0.3,0.3);
     glTranslatef(0.0,-0.9,0.0);
-	cObj.Draw(SMOOTH_MATERIAL_TEXTURE); // use SMOOTH for obj files, SMOOTH_MATERIAL for obj+mtl files and SMOOTH_MATERIAL_TEXTURE for obj+mtl+tga files
+	blocoIndest.Draw(SMOOTH_MATERIAL_TEXTURE); // use SMOOTH for obj files, SMOOTH_MATERIAL for obj+mtl files and SMOOTH_MATERIAL_TEXTURE for obj+mtl+tga files
 	glPopMatrix();*/
 
     // sets the bmp file already loaded to the OpenGL parameters

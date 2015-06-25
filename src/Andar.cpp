@@ -4,8 +4,7 @@ Andar::Andar()
 {
 }
 
-Andar::Andar(GridBitmap* sup, GridBitmap* inf)
+Andar::Andar(GridBitmap andares[])
 {
-    this->superior = sup;
-    this->inferior = inf;
+    *(this->andares) = *andares;
 }
