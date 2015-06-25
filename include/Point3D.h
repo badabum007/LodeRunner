@@ -33,8 +33,9 @@ class Point3D
 
         const GLfloat* as_opengl_vector() const;
         GLfloat x, y, z;
-    protected:
         GLfloat* values = NULL;
+    protected:
+
     private:
 };
 

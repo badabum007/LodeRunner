@@ -595,7 +595,7 @@
 	<GL/glut.h>
 	<math.h>
 
-1435233367 source:c:\users\usuario\desktop\fcg\loderunner\src\main.cpp
+1435236636 source:c:\users\usuario\desktop\fcg\loderunner\src\main.cpp
 	<windows.h>
 	<stdio.h>
 	<stdlib.h>
@@ -618,6 +618,7 @@
 	"../include/bitmap.h"
 	"../include/3DObject.h"
 	"../include/Point3D.h"
+	"../include/Camera.h"
 
 1435092758 c:\users\usuario\desktop\fcg\loderunner\codeblocks\include\al\alut.h
 	<al/alc.h>
@@ -758,19 +759,19 @@
 	<iostream>
 	<vector>
 
-1435198234 source:c:\users\usuario\desktop\fcg\loderunner\src\camera.cpp
+1435235314 source:c:\users\usuario\desktop\fcg\loderunner\src\camera.cpp
 	"../include/Camera.h"
 
-1435198270 c:\users\usuario\desktop\fcg\loderunner\include\camera.h
+1435234946 c:\users\usuario\desktop\fcg\loderunner\include\camera.h
 	<gl/glu.h>
 	<gl/glut.h>
 	"../include/Point3D.h"
 
-1435199219 c:\users\usuario\desktop\fcg\loderunner\include\point3d.h
+1435235638 c:\users\usuario\desktop\fcg\loderunner\include\point3d.h
 	<gl/gl.h>
 	<cstdio>
 
-1435198329 source:c:\users\usuario\desktop\fcg\loderunner\src\point3d.cpp
+1435235191 source:c:\users\usuario\desktop\fcg\loderunner\src\point3d.cpp
 	"../include/Point3D.h"
 	<cmath>
 

@@ -53,6 +53,7 @@ seja uma spotlight;
 //handle generic obj models
 #include "../include/3DObject.h"
 #include "../include/Point3D.h"
+#include "../include/Camera.h"
 
 #pragma comment(lib, "OpenAL32.lib")
 #pragma comment(lib, "alut.lib")
@@ -70,6 +71,7 @@ seja uma spotlight;
 
 #define NUM_INIMIGOS 5
 #define MAX_FLOORS 10
+#define DISTANCIA_ANDARES 12
 
 using std::vector;
 using std::map;
@@ -146,7 +148,7 @@ float headPosAux = 0.0f;
 
 float maxSpeed = 0.25f;
 
-float planeSize = 8.0f;
+float planeSize = 24.0f;
 
 // more sound stuff (position, speed and orientation of the listener)
 ALfloat listenerPos[]={0.0,0.0,4.0};
@@ -193,6 +195,7 @@ float posYOffset = 0.2;
 float backgrundColor[4] = {0.0f,0.0f,0.0f,1.0f};
 
 Point3D posicaoJogador;
+Camera primeiraPessoaCam, terceiraPessoaCam, cimaCam;
 C3DObject blocoIndest, blocoDest, ouro, personagem, escada;
 
 list<Personagem*> inimigos;
@@ -295,34 +298,37 @@ void renderMapa()
 
                     glPushMatrix();
                     glScalef(0.3,0.3,0.3);
-                    glTranslatef(0.0 + 2*i,-2 + 2*k + 12*a,0.0 + 2*j);
+                    glTranslatef(0.0 + 2*i,-2 + 2*k + DISTANCIA_ANDARES*a,0.0 + 2*j);
 
                     if(andar.andares[k].grid[i][j] == ObjEnum::BLOCOINDEST)
                     {
                         blocoIndest.Draw(SMOOTH_MATERIAL_TEXTURE);
-                        matrizMapa[i][j][k] = ObjEnum::BLOCOINDEST;
+                        matrizMapa[i][j][k + DISTANCIA_ANDARES*a] = ObjEnum::BLOCOINDEST;
                     }
 
                     if(andar.andares[k].grid[i][j] == ObjEnum::BLOCODEST)
                     {
                         blocoDest.Draw(SMOOTH_MATERIAL_TEXTURE);
-                        matrizMapa[i][j][k] = ObjEnum::BLOCODEST;
+                        matrizMapa[i][j][k + DISTANCIA_ANDARES*a] = ObjEnum::BLOCODEST;
                     }
 
                     if(andar.andares[k].grid[i][j] == ObjEnum::OURO)
                     {
                         ouro.Draw(SMOOTH_MATERIAL_TEXTURE);
-                        matrizMapa[i][j][k] = ObjEnum::OURO;
+                        matrizMapa[i][j][k + DISTANCIA_ANDARES*a] = ObjEnum::OURO;
                     }
                     if(andar.andares[k].grid[i][j] == ObjEnum::ESCADA)
                     {
                         escada.Draw(SMOOTH_MATERIAL_TEXTURE);
-                        matrizMapa[i][j][k] = ObjEnum::ESCADA;
+                        matrizMapa[i][j][k + DISTANCIA_ANDARES*a] = ObjEnum::ESCADA;
                     }
                     if(andar.andares[k].grid[i][j] == ObjEnum::VAZIO)
                     {
-
-                        matrizMapa[i][j][k] = ObjEnum::VAZIO;
+                        matrizMapa[i][j][k + DISTANCIA_ANDARES*a] = ObjEnum::VAZIO;
+                    }
+                    if(andar.andares[k].grid[i][j] == ObjEnum::PRINCIPAL)
+                    {
+                        matrizMapa[i][j][k + DISTANCIA_ANDARES*a] = ObjEnum::PRINCIPAL;
                     }
 
 
@@ -537,7 +543,7 @@ void enableFog(void)
 }
 
 bool hacolisao (float floatX, float floatZ, int Y){
-    Y = 2;
+
     int direction = round(std::abs(int(roty) % 360)/45.0);
     if (direction == 8)
         direction = 0;
@@ -695,13 +701,13 @@ void updateCamera()
 
     posicaoJogador.set_coords(posX, posY + posYOffset + 0.025 * std::abs(sin(headPosAux*PI/180)) , posZ);
 
-    posicaoJogador.set_eye(pengoPosition + 5 * Point3D(sin(roty*PI/180), -cos(rotx*PI/180), cos(roty*PI/180)));
-    posicaoJogador.set_center(pengoPosition);
-    posicaoJogador.set_upvector(0.0, 1.0, 0.0);
+    terceiraPessoaCam.set_eye(posicaoJogador + 5 * Point3D(sin(roty*PI/180), -cos(rotx*PI/180), cos(roty*PI/180)));
+    terceiraPessoaCam.set_center(posicaoJogador);
+    terceiraPessoaCam.set_upvector(0.0, 1.0, 0.0);
 	// pengoCamera.callGluLookAt();
 
-    fpCamera.set_eye(pengoPosition+ Point3D(0.0, 1.0, 0.0));
-    fpCamera.set_center((pengoPosition + Point3D(0.0,1.0,0.0)) - 5 * Point3D(sin(roty*PI/180), -cos(rotx*PI/180), cos(roty*PI/180)));
+    primeiraPessoaCam.set_eye(posicaoJogador+ Point3D(0.0, 1.0, 0.0));
+    primeiraPessoaCam.set_center((posicaoJogador + Point3D(0.0,1.0,0.0)) - 5 * Point3D(sin(roty*PI/180), -cos(rotx*PI/180), cos(roty*PI/180)));
 
 
 	// atualiza a posição do listener e da origen do som, são as mesmas da camera, já que os passos vem de onde o personagem está
