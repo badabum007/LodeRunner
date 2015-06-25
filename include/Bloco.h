@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <tuple>
 #include "ObjEnum.h"
 
 
@@ -11,15 +12,17 @@ class Bloco
 {
     public:
         Bloco();
-        Bloco(std::pair<int,int> matrixPosition);
+        Bloco(std::tuple<int,int,int> matrixPosition);
         void destroi();
-
+        std::tuple<int,int,int> matrixPosition;
+        std::tuple<int,int,int> getMatrixPosition();
+        ObjEnum tipo;
+        bool isDestroying = false;
+        bool destroyied = false;
 
     protected:
     private:
-        std::pair<int,int> matrixPosition;
-        ObjEnum tipo;
-        bool isDestroying;
+
 };
 
 #endif // BLOCO_H

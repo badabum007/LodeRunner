@@ -32,6 +32,7 @@ seja uma spotlight;
 #include <gl/glut.h>
 #include <string>
 #include <chrono>
+#include <tuple>
 #include <algorithm>
 /// STL INCLUSIONS
 #include <vector>
@@ -68,7 +69,7 @@ seja uma spotlight;
 #define SMOOTH_MATERIAL_TEXTURE 2
 
 #define NUM_INIMIGOS 5
-
+#define MAX_FLOORS 10
 
 using std::vector;
 using std::map;
@@ -191,13 +192,17 @@ float posYOffset = 0.2;
 
 float backgrundColor[4] = {0.0f,0.0f,0.0f,1.0f};
 
-C3DObject blocoIndest, blocoDest, ouro, personagem;
+Point3D posicaoJogador;
+C3DObject blocoIndest, blocoDest, ouro, personagem, escada;
 
 list<Personagem*> inimigos;
 list<Bloco*> blocos;
-Mapa* mapa;
-map<std::pair<int,int>, Bloco*> blocosMap;
+map<std::tuple<int,int,int>, Bloco*> blocosMap;
 
+
+Mapa* mapa;
+
+ObjEnum matrizMapa[GRID_HEIGHT][GRID_WIDTH][MAX_FLOORS];
 
 
 //CModelAl modelAL;
@@ -255,35 +260,78 @@ void initLight() {
 }
 
 
-void initMapa()
+void renderMapa()
 {
+
+    for(int i=0; i<GRID_HEIGHT;i++)
+    {
+        for(int j=0;j<GRID_WIDTH;j++)
+        {
+            glPushMatrix();
+            glScalef(0.3,0.3,0.3);
+            glTranslatef(0.0 + 2*i,-4,0.0 + 2*j);
+            blocoIndest.Draw(SMOOTH_MATERIAL_TEXTURE);
+            glPopMatrix();
+            glPopMatrix();
+        }
+
+    }
+
+    int a =0;
+
 
     for(Andar andar : mapa->andares)
     {
-
         for(int k=0;k<2;k++)
         {
-            for(i=0; i<andar.andares[k].grid.size(); i++)
+            for(int i=0; i<andar.andares[k].grid.size(); i++)
             {
-
                 for(int j=0; j<andar.andares[k].grid[i].size(); j++)
                 {
+                    std::vector<ObjEnum> linha;
+                    Bloco* b = new Bloco(std::make_tuple(i,j,k));
+                    blocos.push_back(b);
+                    blocosMap.insert(std::make_pair(std::make_tuple(i,j,k),b));
+
+                    glPushMatrix();
+                    glScalef(0.3,0.3,0.3);
+                    glTranslatef(0.0 + 2*i,-2 + 2*k + 12*a,0.0 + 2*j);
+
                     if(andar.andares[k].grid[i][j] == ObjEnum::BLOCOINDEST)
                     {
-                       Bloco* b = new Bloco(std::make_pair(i,j));
-                        blocos.push_back(b);
-                        glPushMatrix();
-                        glPushMatrix();
-                        glScalef(0.3,0.3,0.3);
-                        glTranslatef(0.0 + 2*i,-2 + 2*k,0.0 + 2*j);
                         blocoIndest.Draw(SMOOTH_MATERIAL_TEXTURE);
-                        glPopMatrix();
-                        glPopMatrix();
+                        matrizMapa[i][j][k] = ObjEnum::BLOCOINDEST;
                     }
+
+                    if(andar.andares[k].grid[i][j] == ObjEnum::BLOCODEST)
+                    {
+                        blocoDest.Draw(SMOOTH_MATERIAL_TEXTURE);
+                        matrizMapa[i][j][k] = ObjEnum::BLOCODEST;
+                    }
+
+                    if(andar.andares[k].grid[i][j] == ObjEnum::OURO)
+                    {
+                        ouro.Draw(SMOOTH_MATERIAL_TEXTURE);
+                        matrizMapa[i][j][k] = ObjEnum::OURO;
+                    }
+                    if(andar.andares[k].grid[i][j] == ObjEnum::ESCADA)
+                    {
+                        escada.Draw(SMOOTH_MATERIAL_TEXTURE);
+                        matrizMapa[i][j][k] = ObjEnum::ESCADA;
+                    }
+                    if(andar.andares[k].grid[i][j] == ObjEnum::VAZIO)
+                    {
+
+                        matrizMapa[i][j][k] = ObjEnum::VAZIO;
+                    }
+
+
+
+                    glPopMatrix();
                 }
             }
         }
-
+        a++;
 
 
 
@@ -319,7 +367,7 @@ void mainInit() {
     initTexture();
 
 
-    initMapa();
+  //  initMapa();
 
 	initModel();
 
@@ -344,6 +392,10 @@ void initModel() {
 	blocoIndest.Load("../../models/indestrutivel.obj");
 	blocoDest.Init();
 	blocoDest.Load("../../models/destrutivel.obj");
+	ouro.Init();
+	ouro.Load("../../models/ouro.obj");
+	escada.Init();
+	escada.Load("../../models/escada.obj");
 
 
 	printf("Models ok. \n \n \n");
@@ -484,6 +536,89 @@ void enableFog(void)
 {
 }
 
+bool hacolisao (float floatX, float floatZ, int Y){
+    Y = 2;
+    int direction = round(std::abs(int(roty) % 360)/45.0);
+    if (direction == 8)
+        direction = 0;
+
+    if (downPressed)
+        direction = (4+direction) % 8;
+    if (leftPressed)
+        direction = (6+direction) % 8;
+    if (rightPressed)
+        direction = (2+direction) % 8;
+    int Z = (int)std::round(posicaoJogador.getZ() - 0.5) + 12;
+    int X = (int)std::round(posicaoJogador.getX() - 0.5) + 12;
+    Z = (int)(std::round(floatZ - 0.5)) + 12;
+    X = + ((int) std::round(floatX - 0.5)+12);
+    if (Z <= 0 || Z >= planeSize - 1 || X <= 0 || X >= planeSize - 1) return true;
+
+    bool helper = false;
+    /*for (int i = -1; i <= 1; ++i)
+    {
+        for (int j = -1; j <= 1; ++j)
+        {
+            int l = i + x;
+            int k = j + z;
+            if (l < 0 || l >= 24 || k < 0 || k >= 0 || (i == 0 && j == 0)) continue;
+            if (sceneMatrix[l*24+k] == ENEMY)
+            {
+                pengoDead = true;
+                return false;
+            }
+        }
+    }*/
+
+    switch (direction)
+    {
+    case 0:
+        Z--;
+        return  matrizMapa[X-1][Z][Y] != ObjEnum::VAZIO ||
+                matrizMapa[X][Z][Y]!= ObjEnum::VAZIO ||
+                matrizMapa[X+1][Z][Y] != ObjEnum::VAZIO;
+    case 1:
+        return  matrizMapa[X+1][Z-1][Y] != ObjEnum::VAZIO ||
+                matrizMapa[X][Z-1][Y] != ObjEnum::VAZIO ||
+                matrizMapa[X+1][Z][Y]!= ObjEnum::VAZIO;
+        break;
+    case 2:
+        X++;
+        return  matrizMapa[X][Z-1][Y] != ObjEnum::VAZIO ||
+                matrizMapa[X][Z][Y] != ObjEnum::VAZIO ||
+                matrizMapa[X][Z+1][Y] != ObjEnum::VAZIO;
+        break;
+    case 3:
+        return  matrizMapa[X+1][Z][Y] != ObjEnum::VAZIO ||
+                matrizMapa[X+1][Z+1][Y] != ObjEnum::VAZIO ||
+                matrizMapa[X][Z+1][Y] != ObjEnum::VAZIO;
+        break;
+    case 4:
+        Z++;
+        return matrizMapa[X+1][Z][Y] != ObjEnum::VAZIO ||
+                matrizMapa[X][Z][Y]!= ObjEnum::VAZIO ||
+                matrizMapa[X-1][Z][Y]!= ObjEnum::VAZIO;
+        break;
+    case 5:
+        return matrizMapa[X][Z+1][Y] != ObjEnum::VAZIO ||
+                matrizMapa[X-1][Z+1][Y] != ObjEnum::VAZIO ||
+                matrizMapa[X-1][Z][Y] != ObjEnum::VAZIO;
+        break;
+    case 6:
+        X--;
+        return  matrizMapa[X][Z-1][Y] != ObjEnum::VAZIO ||
+                matrizMapa[X][Z][Y] != ObjEnum::VAZIO ||
+                matrizMapa[X][Z+1][Y] != ObjEnum::VAZIO;
+        break;
+    case 7:
+        return matrizMapa[X-1][Z][Y] != ObjEnum::VAZIO ||
+                matrizMapa[X-1][Z-1][Y]!= ObjEnum::VAZIO ||
+                matrizMapa[X][Z-1][Y] != ObjEnum::VAZIO;
+        break;
+
+    }
+}
+
 void renderFloor() {
 	// set things up to render the floor with the texture
 	glShadeModel(GL_SMOOTH);
@@ -548,40 +683,99 @@ void renderScene() {
     setTextureToOpengl();
 //    renderCube(new Point3D(0,0,0));
 
-    initMapa();
+    renderMapa();
 	//renderFloor();
 
 	//modelAL.Translate(0.0f,1.0f,0.0f);
 	//modelAL.Draw();
 }
 
-void updateState() {
+void updateCamera()
+{
 
-	if (upPressed || downPressed) {
+    posicaoJogador.set_coords(posX, posY + posYOffset + 0.025 * std::abs(sin(headPosAux*PI/180)) , posZ);
 
-		if (running) {
+    posicaoJogador.set_eye(pengoPosition + 5 * Point3D(sin(roty*PI/180), -cos(rotx*PI/180), cos(roty*PI/180)));
+    posicaoJogador.set_center(pengoPosition);
+    posicaoJogador.set_upvector(0.0, 1.0, 0.0);
+	// pengoCamera.callGluLookAt();
+
+    fpCamera.set_eye(pengoPosition+ Point3D(0.0, 1.0, 0.0));
+    fpCamera.set_center((pengoPosition + Point3D(0.0,1.0,0.0)) - 5 * Point3D(sin(roty*PI/180), -cos(rotx*PI/180), cos(roty*PI/180)));
+
+
+	// atualiza a posição do listener e da origen do som, são as mesmas da camera, já que os passos vem de onde o personagem está
+	listenerPos[0] = posX;
+	listenerPos[1] = posY;
+	listenerPos[2] = posZ;
+	source0Pos[0] = posX;
+	source0Pos[1] = posY;
+	source0Pos[2] = posZ;
+}
+
+
+void updateState()
+{
+
+	if (upPressed || downPressed)
+    {
+
+		if (running)
+        {
 			speedX = 0.05 * sin(roty*PI/180) * 2;
 			speedZ = -0.05 * cos(roty*PI/180) * 2;
-		} else {
+		} else
+		{
 			speedX = 0.05 * sin(roty*PI/180);
 			speedZ = -0.05 * cos(roty*PI/180);
 		}
 
 		// efeito de "sobe e desce" ao AndarBitmap
 		headPosAux += 8.5f;
-		if (headPosAux > 180.0f) {
+		if (headPosAux > 180.0f)
 			headPosAux = 0.0f;
-		}
 
-        if (upPressed) {
-            posX += speedX;
-            posZ += speedZ;
-        } else {
-            posX -= speedX;
-            posZ -= speedZ;
+        if (upPressed)
+        {
+            if (hacolisao(posX + speedX, posZ + speedZ,posicaoJogador.y)==false)
+            {
+                posX += speedX;
+                posZ += speedZ;
+            }
+            else
+            {
+                if (hacolisao(posX + speedX, posZ, posicaoJogador.y)==false)
+                {
+                    posX += speedX;
+                }
+                else
+                {
+                    if (hacolisao(posX, posZ + speedZ, posicaoJogador.y)==false)
+                    {
+                        posZ += speedZ;
+                    }
+                }
+            }
+        } else
+        {
+
+
+            if (hacolisao(posX - speedX, posZ - speedZ,posicaoJogador.y)==false)
+            {
+                posX -= speedX;
+                posZ -= speedZ;
+            }
+            else
+            {
+                if (hacolisao(posX - speedX, posZ,posicaoJogador.y)==false)
+                    posX -= speedX;
+                else if (hacolisao(posX, posZ - speedZ,posicaoJogador.y)==false)
+                        posZ -= speedZ;
+            }
         }
 
-	} else {
+	} else
+	{
 		// parou de AndarBitmap, para com o efeito de "sobe e desce"
 		headPosAux = fmod(headPosAux, 90) - 1 * headPosAux / 90;
 		headPosAux -= 4.0f;
@@ -631,6 +825,7 @@ Render scene
 void mainRender() {
 	updateState();
 	renderScene();
+	updateCamera();
 	glFlush();
 	glutPostRedisplay();
 	Sleep(30);
@@ -802,7 +997,9 @@ void mainIdle() {
 
 
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
+    posicaoJogador.y = 0;
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);

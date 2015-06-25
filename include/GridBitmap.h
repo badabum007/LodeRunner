@@ -7,6 +7,7 @@
 #include "Color.h"
 #include <vector>
 #include "ObjEnum.h"
+
 #define GRID_HEIGHT 16
 #define GRID_WIDTH 16
 

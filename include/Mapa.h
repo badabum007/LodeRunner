@@ -10,7 +10,6 @@ class Mapa
 {
     public:
         Mapa();
-
         std::vector<Andar> andares;
 
     protected:

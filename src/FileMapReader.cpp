@@ -66,19 +66,20 @@ GridBitmap* ReadBMP(std::string filename)
 
             if(cor == PRINCIPAL_COLOR)
                 linha.push_back(ObjEnum::PRINCIPAL);
-            if(cor == INIMIGO_COLOR)
+            else if(cor == INIMIGO_COLOR)
                 linha.push_back(ObjEnum::INIMIGO);
-            if(cor == BLOCOINDEST_COLOR)
+            else if(cor == BLOCOINDEST_COLOR)
                 linha.push_back(ObjEnum::BLOCOINDEST);
-            if(cor == BLOCODEST_COLOR)
+            else if(cor == BLOCODEST_COLOR)
                 linha.push_back(ObjEnum::BLOCODEST);
-            if(cor == OURO_COLOR)
+            else if(cor == OURO_COLOR)
                 linha.push_back(ObjEnum::OURO);
-            if(cor == ESCADA_COLOR)
+            else if(cor == ESCADA_COLOR)
                 linha.push_back(ObjEnum::ESCADA);
-            if(cor == VAZIO_COLOR)
+            else if(cor == VAZIO_COLOR)
                 linha.push_back(ObjEnum::VAZIO);
-
+            else
+                printf("OBJETO NAO IDENTIFICADO NO BITMAP!");
 
              //std::cout << "R: "<< (int)data[j] << " G: " << (int)data[j+1]<< " B: " << (int)data[j+2]<< std::endl;
         }
@@ -96,7 +97,6 @@ Mapa* FileMapReader::generateMapBitmap(std::string path)
     std::string pathAux;
     Mapa* MapaBitmap = new Mapa();
 
-
     try
     {
         while(true)
@@ -108,6 +108,7 @@ Mapa* FileMapReader::generateMapBitmap(std::string path)
                 pathAux = path + "/" + to_string(AndarBitmapInt) + to_string(nivel) + ".bmp";
                 GridBitmap* data = ReadBMP(pathAux);
                 AndarBitmap.andares[nivel] = *data;
+
             }
             AndarBitmapInt++;
             MapaBitmap->andares.push_back(AndarBitmap);
