@@ -73,7 +73,7 @@ seja uma spotlight;
 #define MAX_FLOORS 20
 #define DISTANCIA_ANDARES 12
 
-#define MAX_PLANSIZE 21
+#define MAX_PLANSIZE 27
 #define MIN_PLANSIZE 11
 
 using std::vector;
@@ -275,7 +275,7 @@ void renderMapa()
         for(int j=0;j<GRID_WIDTH;j++)
         {
             glPushMatrix();
-            glScalef(0.3,0.3,0.3);
+            glScalef(0.5,0.5,0.5);
             glTranslatef(0.0 + 2*i,-4,0.0 + 2*j);
             blocoIndest.Draw(SMOOTH_MATERIAL_TEXTURE);
             glPopMatrix();
@@ -298,7 +298,7 @@ void renderMapa()
                     blocosMap.insert(std::make_pair(std::make_tuple(i,j,k),b));
 
                     glPushMatrix();
-                    glScalef(0.3,0.3,0.3);
+                    glScalef(0.5,0.5,0.5);
                     glTranslatef(0.0 + 2*i,-2 + 2*k + DISTANCIA_ANDARES*a,0.0 + 2*j);
 
                     if(mapa->andares[a].andares[k].grid[i][j] == ObjEnum::BLOCOINDEST)
@@ -559,6 +559,8 @@ bool hacolisao (float floatX, float floatZ, int Y){
     X = + ((int) std::round(floatX - 0.5)+12);
     if (Z <= MIN_PLANSIZE || Z >= MAX_PLANSIZE || X <= MIN_PLANSIZE || X >= MAX_PLANSIZE) return true;
 
+    X = X - 11;
+    Z = Z - 11;
     bool helper = false;
     /*for (int i = -1; i <= 1; ++i)
     {
@@ -574,56 +576,41 @@ bool hacolisao (float floatX, float floatZ, int Y){
             }
         }
     }*/
-    std::cout << "X: " << X << "   Y: " << Y << "  Z: " << Z << std::endl;
-    return false;
     Y = andarNivel;
+    std::cout << "X: " << X << "   Y: " << Y << "  Z: " << Z << std::endl;
+    std::cout << "DIRECAO: " << direction << std::endl;
     switch (direction)
     {
     case 0:
-        Z--;
-        return  matrizMapa[X-1][Z][Y] != ObjEnum::VAZIO ||
-                matrizMapa[X][Z][Y]!= ObjEnum::VAZIO ||
-                matrizMapa[X+1][Z][Y] != ObjEnum::VAZIO;
-    case 1:
-        return  matrizMapa[X+1][Z-1][Y] != ObjEnum::VAZIO ||
-                matrizMapa[X][Z-1][Y] != ObjEnum::VAZIO ||
-                matrizMapa[X+1][Z][Y]!= ObjEnum::VAZIO;
+        return matrizMapa[X][Z-1][Y] != ObjEnum::VAZIO;
         break;
     case 2:
-        return  matrizMapa[X+1][Z][Y] != ObjEnum::VAZIO ||
-                matrizMapa[X][Z][Y] != ObjEnum::VAZIO ||
-                matrizMapa[X][Z+1][Y] != ObjEnum::VAZIO;
+        return matrizMapa[X+1][Z][Y] != ObjEnum::VAZIO;
         break;
-    case 3:
+   /* case 3:
         return  matrizMapa[X+1][Z][Y] != ObjEnum::VAZIO ||
                 matrizMapa[X+1][Z+1][Y] != ObjEnum::VAZIO ||
                 matrizMapa[X][Z+1][Y] != ObjEnum::VAZIO;
-        break;
+        break;*/
     case 4:
-        Z++;
-        return matrizMapa[X+1][Z][Y] != ObjEnum::VAZIO ||
-                matrizMapa[X][Z][Y]!= ObjEnum::VAZIO ||
-                matrizMapa[X-1][Z][Y]!= ObjEnum::VAZIO;
+        return matrizMapa[X][Z+1][Y] != ObjEnum::VAZIO;
         break;
-    case 5:
+   /* case 5:
         return matrizMapa[X][Z+1][Y] != ObjEnum::VAZIO ||
                 matrizMapa[X-1][Z+1][Y] != ObjEnum::VAZIO ||
-                matrizMapa[X-1][Z][Y] != ObjEnum::VAZIO;
+                matrizMapa[X-1][Z][Y] != ObjEnum::VAZIO;*/
         break;
     case 6:
         X--;
-        return  matrizMapa[X][Z-1][Y] != ObjEnum::VAZIO ||
-                matrizMapa[X][Z][Y] != ObjEnum::VAZIO ||
-                matrizMapa[X][Z+1][Y] != ObjEnum::VAZIO;
+        return  matrizMapa[X][Z+1][Y] != ObjEnum::VAZIO;
         break;
-    case 7:
+  /*  case 7:
         return matrizMapa[X-1][Z][Y] != ObjEnum::VAZIO ||
                 matrizMapa[X-1][Z-1][Y]!= ObjEnum::VAZIO ||
                 matrizMapa[X][Z-1][Y] != ObjEnum::VAZIO;
-        break;
+        break;*/
 
     }
-
     return false;
 }
 
@@ -1026,7 +1013,7 @@ int main(int argc, char **argv)
 	/**
 	Register mouse events handlers
 	*/
-/*	glutMouseFunc(onMouseButton);
+	/*glutMouseFunc(onMouseButton);
 	glutMotionFunc(onMouseMove);
 	glutPassiveMotionFunc(onMousePassiveMove);*/
 
