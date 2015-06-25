@@ -3,13 +3,13 @@
 
 enum class ObjEnum
 {
+    VAZIO,
     PRINCIPAL,
     INIMIGO,
     BLOCODEST,
     BLOCOINDEST,
     OURO,
-    ESCADA,
-    VAZIO
+    ESCADA
 };
 
 #endif // OBJENUM_H_INCLUDED

@@ -70,8 +70,11 @@ seja uma spotlight;
 #define SMOOTH_MATERIAL_TEXTURE 2
 
 #define NUM_INIMIGOS 5
-#define MAX_FLOORS 10
+#define MAX_FLOORS 20
 #define DISTANCIA_ANDARES 12
+
+#define MAX_PLANSIZE 21
+#define MIN_PLANSIZE 11
 
 using std::vector;
 using std::map;
@@ -195,6 +198,7 @@ float posYOffset = 0.2;
 float backgrundColor[4] = {0.0f,0.0f,0.0f,1.0f};
 
 Point3D posicaoJogador;
+int andarNivel = 1;
 Camera primeiraPessoaCam, terceiraPessoaCam, cimaCam;
 C3DObject blocoIndest, blocoDest, ouro, personagem, escada;
 
@@ -280,56 +284,55 @@ void renderMapa()
 
     }
 
-    int a =0;
-
-
-    for(Andar andar : mapa->andares)
+    for(int a=0;a < mapa->andares.size();a++)
     {
         for(int k=0;k<2;k++)
         {
-            for(int i=0; i<andar.andares[k].grid.size(); i++)
+            for(int i=0; i<GRID_HEIGHT; i++)
             {
-                for(int j=0; j<andar.andares[k].grid[i].size(); j++)
+                for(int j=0; j<GRID_WIDTH; j++)
                 {
                     std::vector<ObjEnum> linha;
                     Bloco* b = new Bloco(std::make_tuple(i,j,k));
-                    blocos.push_back(b);
+
                     blocosMap.insert(std::make_pair(std::make_tuple(i,j,k),b));
 
                     glPushMatrix();
                     glScalef(0.3,0.3,0.3);
                     glTranslatef(0.0 + 2*i,-2 + 2*k + DISTANCIA_ANDARES*a,0.0 + 2*j);
 
-                    if(andar.andares[k].grid[i][j] == ObjEnum::BLOCOINDEST)
+                    if(mapa->andares[a].andares[k].grid[i][j] == ObjEnum::BLOCOINDEST)
                     {
+                        b->tipo = ObjEnum::BLOCOINDEST;
                         blocoIndest.Draw(SMOOTH_MATERIAL_TEXTURE);
-                        matrizMapa[i][j][k + DISTANCIA_ANDARES*a] = ObjEnum::BLOCOINDEST;
+                        matrizMapa[i][j][k + a] = ObjEnum::BLOCOINDEST;
                     }
 
-                    if(andar.andares[k].grid[i][j] == ObjEnum::BLOCODEST)
+                    if(mapa->andares[a].andares[k].grid[i][j] == ObjEnum::BLOCODEST)
                     {
+                        b->tipo = ObjEnum::BLOCODEST;
                         blocoDest.Draw(SMOOTH_MATERIAL_TEXTURE);
-                        matrizMapa[i][j][k + DISTANCIA_ANDARES*a] = ObjEnum::BLOCODEST;
+                        matrizMapa[i][j][k + a] = ObjEnum::BLOCODEST;
                     }
 
-                    if(andar.andares[k].grid[i][j] == ObjEnum::OURO)
+                    if(mapa->andares[a].andares[k].grid[i][j] == ObjEnum::OURO)
                     {
+                        b->tipo = ObjEnum::OURO;
                         ouro.Draw(SMOOTH_MATERIAL_TEXTURE);
-                        matrizMapa[i][j][k + DISTANCIA_ANDARES*a] = ObjEnum::OURO;
+                        matrizMapa[i][j][k + a] = ObjEnum::OURO;
                     }
-                    if(andar.andares[k].grid[i][j] == ObjEnum::ESCADA)
+                    if(mapa->andares[a].andares[k].grid[i][j] == ObjEnum::ESCADA)
                     {
+                        b->tipo = ObjEnum::ESCADA;
                         escada.Draw(SMOOTH_MATERIAL_TEXTURE);
-                        matrizMapa[i][j][k + DISTANCIA_ANDARES*a] = ObjEnum::ESCADA;
+                        matrizMapa[i][j][k + a] = ObjEnum::ESCADA;
                     }
-                    if(andar.andares[k].grid[i][j] == ObjEnum::VAZIO)
+                    if(mapa->andares[a].andares[k].grid[i][j] == ObjEnum::VAZIO)
                     {
-                        matrizMapa[i][j][k + DISTANCIA_ANDARES*a] = ObjEnum::VAZIO;
+                        b->tipo = ObjEnum::VAZIO;
+                        matrizMapa[i][j][k + a] = ObjEnum::VAZIO;
                     }
-                    if(andar.andares[k].grid[i][j] == ObjEnum::PRINCIPAL)
-                    {
-                        matrizMapa[i][j][k + DISTANCIA_ANDARES*a] = ObjEnum::PRINCIPAL;
-                    }
+                    blocos.push_back(b);
 
 
 
@@ -337,10 +340,6 @@ void renderMapa()
                 }
             }
         }
-        a++;
-
-
-
     }
 }
 
@@ -558,7 +557,7 @@ bool hacolisao (float floatX, float floatZ, int Y){
     int X = (int)std::round(posicaoJogador.getX() - 0.5) + 12;
     Z = (int)(std::round(floatZ - 0.5)) + 12;
     X = + ((int) std::round(floatX - 0.5)+12);
-    if (Z <= 0 || Z >= planeSize - 1 || X <= 0 || X >= planeSize - 1) return true;
+    if (Z <= MIN_PLANSIZE || Z >= MAX_PLANSIZE || X <= MIN_PLANSIZE || X >= MAX_PLANSIZE) return true;
 
     bool helper = false;
     /*for (int i = -1; i <= 1; ++i)
@@ -575,7 +574,9 @@ bool hacolisao (float floatX, float floatZ, int Y){
             }
         }
     }*/
-
+    std::cout << "X: " << X << "   Y: " << Y << "  Z: " << Z << std::endl;
+    return false;
+    Y = andarNivel;
     switch (direction)
     {
     case 0:
@@ -589,8 +590,7 @@ bool hacolisao (float floatX, float floatZ, int Y){
                 matrizMapa[X+1][Z][Y]!= ObjEnum::VAZIO;
         break;
     case 2:
-        X++;
-        return  matrizMapa[X][Z-1][Y] != ObjEnum::VAZIO ||
+        return  matrizMapa[X+1][Z][Y] != ObjEnum::VAZIO ||
                 matrizMapa[X][Z][Y] != ObjEnum::VAZIO ||
                 matrizMapa[X][Z+1][Y] != ObjEnum::VAZIO;
         break;
@@ -623,6 +623,8 @@ bool hacolisao (float floatX, float floatZ, int Y){
         break;
 
     }
+
+    return false;
 }
 
 void renderFloor() {
@@ -1005,7 +1007,7 @@ void mainIdle() {
 
 int main(int argc, char **argv)
 {
-    posicaoJogador.y = 0;
+    andarNivel = 1;
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
@@ -1024,9 +1026,9 @@ int main(int argc, char **argv)
 	/**
 	Register mouse events handlers
 	*/
-	glutMouseFunc(onMouseButton);
+/*	glutMouseFunc(onMouseButton);
 	glutMotionFunc(onMouseMove);
-	glutPassiveMotionFunc(onMousePassiveMove);
+	glutPassiveMotionFunc(onMousePassiveMove);*/
 
 	/**
 	Register keyboard events handlers

@@ -29,10 +29,10 @@ class GridBitmap
 {
 public:
         GridBitmap();
-        GridBitmap(std::vector<std::vector<ObjEnum>> grid);
+        GridBitmap(ObjEnum grid[GRID_HEIGHT][GRID_WIDTH]);
 
 
-        std::vector<std::vector<ObjEnum>> grid;
+        ObjEnum grid[GRID_HEIGHT][GRID_WIDTH] ;
     protected:
     private:
 };

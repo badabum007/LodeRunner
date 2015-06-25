@@ -595,7 +595,7 @@
 	<GL/glut.h>
 	<math.h>
 
-1435236636 source:c:\users\usuario\desktop\fcg\loderunner\src\main.cpp
+1435243445 source:c:\users\usuario\desktop\fcg\loderunner\src\main.cpp
 	<windows.h>
 	<stdio.h>
 	<stdlib.h>
@@ -642,9 +642,11 @@
 1435092758 c:\users\usuario\desktop\fcg\loderunner\src\color.h
 	<stdint.h>
 
-1435210067 source:c:\users\usuario\desktop\fcg\loderunner\src\gridbitmap.cpp
+1435238161 source:c:\users\usuario\desktop\fcg\loderunner\src\gridbitmap.cpp
 	"../include/GridBitmap.h"
 	"../include/ObjEnum.h"
+	<stdio.h>
+	<string.h>
 
 1435092758 c:\users\usuario\desktop\fcg\loderunner\src\gridbitmap.h
 	"Color.h"
@@ -656,7 +658,7 @@
 1435092758 c:\users\usuario\desktop\fcg\loderunner\src\andar.h
 	"GridBitmap.h"
 
-1435229282 source:c:\users\usuario\desktop\fcg\loderunner\src\filemapreader.cpp
+1435239644 source:c:\users\usuario\desktop\fcg\loderunner\src\filemapreader.cpp
 	"../include/FileMapReader.h"
 	"../include/bitmap.h"
 	<stdlib.h>
@@ -684,7 +686,7 @@
 1435219585 c:\users\usuario\desktop\fcg\loderunner\include\andar.h
 	"GridBitmap.h"
 
-1435229061 c:\users\usuario\desktop\fcg\loderunner\include\gridbitmap.h
+1435237896 c:\users\usuario\desktop\fcg\loderunner\include\gridbitmap.h
 	"Color.h"
 	<vector>
 	"ObjEnum.h"
@@ -738,7 +740,7 @@
 	<tuple>
 	"ObjEnum.h"
 
-1435196143 c:\users\usuario\desktop\fcg\loderunner\include\objenum.h
+1435242205 c:\users\usuario\desktop\fcg\loderunner\include\objenum.h
 
 1435214245 source:c:\users\usuario\desktop\fcg\loderunner\src\personagem.cpp
 	"../include/Personagem.h"

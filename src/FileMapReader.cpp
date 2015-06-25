@@ -29,12 +29,13 @@ std::string to_string(int value)
 GridBitmap* ReadBMP(std::string filename)
 {
     int i;
+    std::cout << filename;
     GridBitmap* grid = new GridBitmap();
     const char* str  = filename.c_str();
     FILE* f = fopen(str, "rb");
 
     if(f == NULL)
-        throw std::exception();
+        throw 20;
 
     unsigned char info[54];
     fread(info, sizeof(unsigned char), 54, f); // read the 54-byte header
@@ -51,13 +52,12 @@ GridBitmap* ReadBMP(std::string filename)
     int row_padded = (width*3 + 3) & (~3);
     unsigned char* data = new unsigned char[row_padded];
     unsigned char tmp;
-
-    for(int i = 0; i < height; i++)
+    for(int i=0; i<height; i++)
     {
-        std::vector<ObjEnum> linha;
         fread(data, sizeof(unsigned char), row_padded, f);
         for(int j = 0; j < width*3; j += 3)
         {
+            int aux = j/3;
             // Convert (B, G, R) to (R, G, B)
             tmp = data[j];
             data[j] = data[j+2];
@@ -65,25 +65,24 @@ GridBitmap* ReadBMP(std::string filename)
             Color cor = Color((uint8_t) data[j], (uint8_t) data[j+1], (uint8_t) data[j+2]);
 
             if(cor == PRINCIPAL_COLOR)
-                linha.push_back(ObjEnum::PRINCIPAL);
+                grid->grid[i][aux] = ObjEnum::PRINCIPAL;
             else if(cor == INIMIGO_COLOR)
-                linha.push_back(ObjEnum::INIMIGO);
+                grid->grid[i][aux] = ObjEnum::INIMIGO;
             else if(cor == BLOCOINDEST_COLOR)
-                linha.push_back(ObjEnum::BLOCOINDEST);
+                grid->grid[i][aux] = ObjEnum::BLOCOINDEST;
             else if(cor == BLOCODEST_COLOR)
-                linha.push_back(ObjEnum::BLOCODEST);
+                grid->grid[i][aux] = ObjEnum::BLOCODEST;
             else if(cor == OURO_COLOR)
-                linha.push_back(ObjEnum::OURO);
+                grid->grid[i][aux] = ObjEnum::OURO;
             else if(cor == ESCADA_COLOR)
-                linha.push_back(ObjEnum::ESCADA);
+                grid->grid[i][aux] = ObjEnum::ESCADA;
             else if(cor == VAZIO_COLOR)
-                linha.push_back(ObjEnum::VAZIO);
+                grid->grid[i][aux] = ObjEnum::VAZIO;
             else
                 printf("OBJETO NAO IDENTIFICADO NO BITMAP!");
 
              //std::cout << "R: "<< (int)data[j] << " G: " << (int)data[j+1]<< " B: " << (int)data[j+2]<< std::endl;
         }
-        grid->grid.push_back(linha);
     }
 
     fclose(f);
@@ -114,9 +113,9 @@ Mapa* FileMapReader::generateMapBitmap(std::string path)
             MapaBitmap->andares.push_back(AndarBitmap);
         }
 
-    }catch(const std::exception& e)
+    }catch(const int e)
     {
-
+        std::cout << "dsadasda";
     }
 
     return MapaBitmap;
