@@ -75,6 +75,7 @@ seja uma spotlight;
 
 #define FATOR_TAMANHO_MAPA 4
 
+
 #define MAX_PLANSIZE 15
 #define MIN_PLANSIZE 0
 
@@ -365,6 +366,8 @@ void renderMapa()
            // matrizMapa[i][j][k + a] = ObjEnum::BLOCODEST;
             if(bl->destroyied == false)
                 blocoDest.Draw(SMOOTH_MATERIAL_TEXTURE);
+            else
+                bl->reconstroi();
 
         }
 
@@ -839,7 +842,7 @@ void updateState()
 
         if(b != NULL)
         {
-            b->destroyied = true;
+            b->destroi();
             spacePressed = false;
         }
 
@@ -860,9 +863,9 @@ void updateState()
     {
 		posY = heightLimit;
 		speedY = 0.0f;
-	} else {
+	} else
+	{
 		speedY -= gravity;
-
 	}
 
 	if (crouched)
@@ -1094,6 +1097,8 @@ int main(int argc, char **argv)
 	glutKeyboardFunc(onKeyDown);
 	glutKeyboardUpFunc(onKeyUp);
 
+    time_t now;
+	time(&now);
 
     mapa = FileMapReader::generateMapBitmap("C:/Users/Usuario/Desktop/mapas");
 	mainInit();

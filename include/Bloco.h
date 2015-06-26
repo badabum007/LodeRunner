@@ -4,8 +4,10 @@
 #include <iostream>
 #include <vector>
 #include <tuple>
+#include <ctime>
 #include "ObjEnum.h"
 
+#define TEMPO_BLOCO_DESTRUIDO 2
 
 
 class Bloco
@@ -14,11 +16,13 @@ class Bloco
         Bloco();
         Bloco(std::tuple<int,int,int> matrixPosition);
         void destroi();
+        void reconstroi();
         std::tuple<int,int,int> matrixPosition;
         std::tuple<int,int,int> getMatrixPosition();
         ObjEnum tipo;
         bool isDestroying = false;
         bool destroyied = false;
+        time_t tempoInicioDest;
 
     protected:
     private:
