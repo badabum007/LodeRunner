@@ -264,6 +264,77 @@ void initLight() {
 
 }
 
+void initBlocos()
+{
+    for(int a=0;a < mapa->andares.size();a++)
+    {
+        for(int k=0;k<2;k++)
+        {
+            std::cout << "A: " << a << "  K: " << k << std::endl;
+            for(int i=0; i<GRID_HEIGHT; i++)
+            {
+                for(int j=0; j<GRID_WIDTH; j++)
+                {
+
+                    matrizMapa[i][j][k + a] = mapa->andares[a].andares[k].grid[i][j];
+                   // std::cout << (int)matrizMapa[i][j][k + a] << " ";
+                }
+                //std::cout << std::endl;
+            }
+         //  std::cout << std::endl;
+        }
+       // std::cout << std::endl << std::endl << std::endl;
+    }
+
+/*for(int a=0;a < mapa->andares.size();a++)
+    {
+        for(int k=0;k<2;k++)
+        {
+            std::cout << "A: " << a << "  K: " << k;
+            for(int i=0; i<GRID_HEIGHT; i++)
+            {
+                for(int j=0; j<GRID_WIDTH; j++)
+                {
+                    std::cout << (int)matrizMapa[i][j][k + a] << " ";
+                }
+                std::cout << std::endl;
+            }
+           std::cout << std::endl;
+        }
+        std::cout << std::endl << std::endl << std::endl;
+    }*/
+
+    for(int a=0;a < mapa->andares.size();a++)
+    {
+        for(int k=0;k<2;k++)
+        {
+            for(int i=0; i<GRID_HEIGHT; i++)
+            {
+                for(int j=0; j<GRID_WIDTH; j++)
+                {
+                    Bloco* b = new Bloco(std::make_tuple(i,j,-2 + 2*k+ DISTANCIA_ANDARES*a));
+                    blocos.push_back(b);
+                    ObjEnum value = mapa->andares[a].andares[k].grid[i][j];
+                    std::cout << (int)mapa->andares[a].andares[k].grid[i][j] << " ";
+                    if(value == ObjEnum::BLOCODEST)
+                        b->tipo = ObjEnum::BLOCODEST;
+                    else if(value == ObjEnum::BLOCOINDEST)
+                        b->tipo = ObjEnum::BLOCOINDEST;
+                    else if(value == ObjEnum::OURO)
+                        b->tipo = ObjEnum::OURO;
+                    else if(value == ObjEnum::ESCADA)
+                        b->tipo = ObjEnum::ESCADA;
+
+                    blocosMap.insert(std::make_pair(std::make_tuple(i,j,-2 + 2*k+ DISTANCIA_ANDARES*a),b));
+
+                }
+                std::cout << std::endl;
+            }
+            std::cout << std::endl;
+        }
+        std::cout << std::endl << std::endl << std::endl;
+    }
+}
 
 void renderMapa()
 {
@@ -282,65 +353,64 @@ void renderMapa()
 
     }
 
-
-
-    for(int a=0;a < mapa->andares.size();a++)
+    int k=0;
+    for(Bloco* bl : blocos)
     {
-        for(int k=0;k<2;k++)
+
+        //Bloco* b = new Bloco(std::make_tuple(i,j,k));
+
+       // blocosMap.erase(std::make_pair(std::make_tuple(i,j,k),b));
+        //blocosMap.insert(std::make_pair(std::make_tuple(i,j,k),b));
+
+
+        glPushMatrix();
+     //   glScalef(0.5,0.5,0.5);
+        std::tuple<int,int,int> pos = bl->getMatrixPosition();
+        glTranslatef(0.0 + 2*std::get<1>(pos),std::get<2>(pos),0.0 + 2*std::get<0>(pos));
+
+
+        if(bl->tipo == ObjEnum::BLOCOINDEST)
         {
-            for(int i=0; i<GRID_HEIGHT; i++)
-            {
-                for(int j=0; j<GRID_WIDTH; j++)
-                {
-                    std::vector<ObjEnum> linha;
-                    Bloco* b = new Bloco(std::make_tuple(i,j,k));
-
-                    blocosMap.insert(std::make_pair(std::make_tuple(i,j,k),b));
-
-                    glPushMatrix();
-                 //   glScalef(0.5,0.5,0.5);
-                    glTranslatef(0.0 + 2*i,-2 + 2*k + DISTANCIA_ANDARES*a,0.0 + 2*j);
-
-                    if(mapa->andares[a].andares[k].grid[i][j] == ObjEnum::BLOCOINDEST)
-                    {
-                        b->tipo = ObjEnum::BLOCOINDEST;
-                        blocoIndest.Draw(SMOOTH_MATERIAL_TEXTURE);
-                        matrizMapa[i][j][k + a] = ObjEnum::BLOCOINDEST;
-                    }
-
-                    if(mapa->andares[a].andares[k].grid[i][j] == ObjEnum::BLOCODEST)
-                    {
-                        b->tipo = ObjEnum::BLOCODEST;
-                        blocoDest.Draw(SMOOTH_MATERIAL_TEXTURE);
-                        matrizMapa[i][j][k + a] = ObjEnum::BLOCODEST;
-                    }
-
-                    if(mapa->andares[a].andares[k].grid[i][j] == ObjEnum::OURO)
-                    {
-                        b->tipo = ObjEnum::OURO;
-                        ouro.Draw(SMOOTH_MATERIAL_TEXTURE);
-                        matrizMapa[i][j][k + a] = ObjEnum::OURO;
-                    }
-                    if(mapa->andares[a].andares[k].grid[i][j] == ObjEnum::ESCADA)
-                    {
-                        b->tipo = ObjEnum::ESCADA;
-                        escada.Draw(SMOOTH_MATERIAL_TEXTURE);
-                        matrizMapa[i][j][k + a] = ObjEnum::ESCADA;
-                    }
-                    if(mapa->andares[a].andares[k].grid[i][j] == ObjEnum::VAZIO)
-                    {
-                        b->tipo = ObjEnum::VAZIO;
-                        matrizMapa[i][j][k + a] = ObjEnum::VAZIO;
-                    }
-                    blocos.push_back(b);
-
-
-
-                    glPopMatrix();
-                }
-            }
+            //b->tipo = ObjEnum::BLOCOINDEST;
+            blocoIndest.Draw(SMOOTH_MATERIAL_TEXTURE);
+           // matrizMapa[i][j][k + a] = ObjEnum::BLOCOINDEST;
         }
+
+        if(bl->tipo == ObjEnum::BLOCODEST)
+        {
+            //b->tipo = ObjEnum::BLOCODEST;
+           // matrizMapa[i][j][k + a] = ObjEnum::BLOCODEST;
+            if(bl->destroyied == false)
+                blocoDest.Draw(SMOOTH_MATERIAL_TEXTURE);
+
+        }
+
+        if(bl->tipo == ObjEnum::OURO)
+        {
+            //b->tipo = ObjEnum::OURO;
+            ouro.Draw(SMOOTH_MATERIAL_TEXTURE);
+           // matrizMapa[i][j][k + a] = ObjEnum::OURO;
+        }
+        if(bl->tipo == ObjEnum::ESCADA)
+        {
+           // b->tipo = ObjEnum::ESCADA;
+            escada.Draw(SMOOTH_MATERIAL_TEXTURE);
+           // matrizMapa[i][j][k + a] = ObjEnum::ESCADA;
+        }
+        if(bl->tipo == ObjEnum::VAZIO)
+        {
+            //b->tipo = ObjEnum::VAZIO;
+           // matrizMapa[i][j][k + a] = ObjEnum::VAZIO;
+        }
+//        blocos.push_back(b);
+
+
+
+        glPopMatrix();
     }
+
+
+
 }
 
 void setViewport(GLint left, GLint right, GLint bottom, GLint top) {
@@ -372,11 +442,12 @@ void mainInit() {
     initTexture();
 
 
-  //  initMapa();
+//    initMapa();
+    renderMapa();
 
 	initModel();
 
-
+    initBlocos();
 
 	initLight();
 
@@ -543,6 +614,7 @@ void enableFog(void)
 
 bool hacolisao (float floatX, float floatZ, int Y){
 
+    return false;
     int direction = round(std::abs(int(roty) % 360)/45.0);
     if (direction == 8)
         direction = 0;
@@ -716,7 +788,7 @@ void updateCamera()
 void updateState()
 {
 
-    std::cout << "Speed: " << speedX << "  POSX: " << posX << std::endl;
+   // std::cout << "Speed: " << speedX << "  POSX: " << posX << std::endl;
 	if (upPressed || downPressed)
     {
 
@@ -779,11 +851,18 @@ void updateState()
 		// parou de AndarBitmap, para com o efeito de "sobe e desce"
 		headPosAux = fmod(headPosAux, 90) - 1 * headPosAux / 90;
 		headPosAux -= 4.0f;
-		if (headPosAux < 0.0f) {
+		if (headPosAux < 0.0f)
+		{
 			headPosAux = 0.0f;
 		}
 	}
 
+    if(spacePressed)
+    {
+//        Bloco* b = matrizMapa[posX][posZ][posicaoJogador.y];
+  //      b->destroyied = true;
+        spacePressed = false;
+    }
 	if(leftPressed)
     {
         roty -= 90;
@@ -796,7 +875,8 @@ void updateState()
     }
 
 	posY += speedY;
-	if (posY < heightLimit) {
+	if (posY < heightLimit)
+    {
 		posY = heightLimit;
 		speedY = 0.0f;
 	} else {
@@ -804,19 +884,25 @@ void updateState()
 
 	}
 
-	if (crouched) {
+	if (crouched)
+    {
 		posYOffset -= 0.01;
-		if (posYOffset < 0.1) {
+		if (posYOffset < 0.1)
+		{
 			posYOffset = 0.1;
 		}
-	} else {
+	} else
+	{
 		posYOffset += 0.01;
-		if (posYOffset > 0.2) {
+		if (posYOffset > 0.2)
+		{
 			posYOffset = 0.2;
 		}
 	}
 
 }
+
+
 
 /**
 Render scene

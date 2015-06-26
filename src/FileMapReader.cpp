@@ -29,7 +29,7 @@ std::string to_string(int value)
 GridBitmap* ReadBMP(std::string filename)
 {
     int i;
-    std::cout << filename;
+    std::cout << filename << std::endl;
     GridBitmap* grid = new GridBitmap();
     const char* str  = filename.c_str();
     FILE* f = fopen(str, "rb");
