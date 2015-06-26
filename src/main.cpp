@@ -73,8 +73,10 @@ seja uma spotlight;
 #define MAX_FLOORS 20
 #define DISTANCIA_ANDARES 12
 
-#define MAX_PLANSIZE 41
-#define MIN_PLANSIZE 11
+#define FATOR_TAMANHO_MAPA 4
+
+#define MAX_PLANSIZE 15
+#define MIN_PLANSIZE 0
 
 using std::vector;
 using std::map;
@@ -136,22 +138,22 @@ bool downPressed = false;
 
 bool spacePressed = false;
 
-float speedX = 10.0f;
+float speedX = 0.0f;
 float speedY = 0.0f;
 float speedZ = 0.0f;
 
-float posX = 0.0f;
+float posX = 5.0f;
 float posY = 0.0f;
-float posZ = 2.0f;
+float posZ = 5.0f;
 
 /*
 variavel auxiliar pra dar variação na altura do ponto de vista ao AndarBitmap.
 */
 float headPosAux = 0.0f;
 
-float maxSpeed = 10.25f;
+float maxSpeed = 0.25f;
 
-float planeSize = 24.0f;
+float planeSize = 8.0f;
 
 // more sound stuff (position, speed and orientation of the listener)
 ALfloat listenerPos[]={0.0,0.0,4.0};
@@ -253,7 +255,7 @@ void initLight() {
 	glEnable( GL_LIGHT0 );
 
 	GLfloat light_ambient[] = { backgrundColor[0], backgrundColor[1], backgrundColor[2], backgrundColor[3] };
-	GLfloat light_diffuse[] = { 10.0, 10.0, 10.0, 10.0 };
+	GLfloat light_diffuse[] = { 100.0, 100.0, 100.0, 100.0 };
 	GLfloat light_specular[] = { 10.0, 10.0, 10.0, 10.0 };
 	GLfloat light_position1[] = {0.0, 0.0, 0.0, 1.0 };
 
@@ -277,32 +279,10 @@ void initBlocos()
                 {
 
                     matrizMapa[i][j][k + a] = mapa->andares[a].andares[k].grid[i][j];
-                   // std::cout << (int)matrizMapa[i][j][k + a] << " ";
                 }
-                //std::cout << std::endl;
             }
-         //  std::cout << std::endl;
         }
-       // std::cout << std::endl << std::endl << std::endl;
     }
-
-/*for(int a=0;a < mapa->andares.size();a++)
-    {
-        for(int k=0;k<2;k++)
-        {
-            std::cout << "A: " << a << "  K: " << k;
-            for(int i=0; i<GRID_HEIGHT; i++)
-            {
-                for(int j=0; j<GRID_WIDTH; j++)
-                {
-                    std::cout << (int)matrizMapa[i][j][k + a] << " ";
-                }
-                std::cout << std::endl;
-            }
-           std::cout << std::endl;
-        }
-        std::cout << std::endl << std::endl << std::endl;
-    }*/
 
     for(int a=0;a < mapa->andares.size();a++)
     {
@@ -328,23 +308,26 @@ void initBlocos()
                     blocosMap.insert(std::make_pair(std::make_tuple(i,j,-2 + 2*k+ DISTANCIA_ANDARES*a),b));
 
                 }
-                std::cout << std::endl;
             }
-            std::cout << std::endl;
         }
-        std::cout << std::endl << std::endl << std::endl;
     }
+}
+
+std::pair<int,int> separaAltura(int y)
+{
+    int k = ((y+2) % DISTANCIA_ANDARES) /2;
+    int a = ((y + 2) + 2*k) / DISTANCIA_ANDARES;
+    return std::make_pair(k,a);
 }
 
 void renderMapa()
 {
-
     for(int i=0; i<GRID_HEIGHT;i++)
     {
         for(int j=0;j<GRID_WIDTH;j++)
         {
             glPushMatrix();
-          //  glScalef(0.5,0.5,0.5);
+            glScalef(FATOR_TAMANHO_MAPA,FATOR_TAMANHO_MAPA,FATOR_TAMANHO_MAPA);
             glTranslatef(0.0 + 2*i,-4,0.0 + 2*j);
             blocoIndest.Draw(SMOOTH_MATERIAL_TEXTURE);
             glPopMatrix();
@@ -364,7 +347,7 @@ void renderMapa()
 
 
         glPushMatrix();
-     //   glScalef(0.5,0.5,0.5);
+        glScalef(FATOR_TAMANHO_MAPA,FATOR_TAMANHO_MAPA,FATOR_TAMANHO_MAPA);
         std::tuple<int,int,int> pos = bl->getMatrixPosition();
         glTranslatef(0.0 + 2*std::get<1>(pos),std::get<2>(pos),0.0 + 2*std::get<0>(pos));
 
@@ -614,7 +597,7 @@ void enableFog(void)
 
 bool hacolisao (float floatX, float floatZ, int Y){
 
-    return false;
+
     int direction = round(std::abs(int(roty) % 360)/45.0);
     if (direction == 8)
         direction = 0;
@@ -625,16 +608,16 @@ bool hacolisao (float floatX, float floatZ, int Y){
         direction = (6+direction) % 8;
     if (rightPressed)
         direction = (2+direction) % 8;
-    int Z = (int)std::round(posicaoJogador.getZ() - 0.5) + 12;
-    int X = (int)std::round(posicaoJogador.getX() - 0.5) + 12;
-    Z = (int)(std::round(floatZ - 0.5)) + 12;
-    X = + ((int) std::round(floatX - 0.5)+12);
-    if (Z <= MIN_PLANSIZE || Z >= MAX_PLANSIZE || X <= MIN_PLANSIZE || X >= MAX_PLANSIZE) return true;
+    int Zaux = (int)(std::round((floatZ - 0.5)));
+    int Xaux =  + ((int) std::round((floatX - 0.5)));
+    int Z =  Zaux  / (FATOR_TAMANHO_MAPA*2) ;
+    int X = Xaux  / (FATOR_TAMANHO_MAPA*2);
 
-    X = X - 11;
-    Z = Z - 11;
-    X = X/2;
-    Z = Z/2;
+  //  int Xaux =
+ //   if (Z <= MIN_PLANSIZE || Z >= MAX_PLANSIZE || X <= MIN_PLANSIZE || X >= MAX_PLANSIZE) return true;
+
+
+
     bool helper = false;
     /*for (int i = -1; i <= 1; ++i)
     {
@@ -651,40 +634,41 @@ bool hacolisao (float floatX, float floatZ, int Y){
         }
     }*/
     Y = andarNivel;
-    std::cout << "X: " << X << "   Y: " << Y << "  Z: " << Z << std::endl;
+    std::pair<int,int> par = separaAltura(Y);
+   int k = par.first, a = par.second;
+    std::cout << "X: " << X << "   Zaux: " << Zaux << "  Z: " << Z << std::endl;
     std::cout << "DIRECAO: " << direction << std::endl;
-   // return false;
+ //   return false;
     switch (direction)
     {
     case 0:
-        return matrizMapa[X][Z-1][Y] != ObjEnum::VAZIO;
+        return mapa->andares[a].andares[k].grid[Z-1][X] != ObjEnum::VAZIO || mapa->andares[a].andares[k].grid[Z-1][X+1] != ObjEnum::VAZIO;
         break;
-    case 1:
-      return matrizMapa[X+1][Z-1][Y] != ObjEnum::VAZIO ||
-             matrizMapa[X+1][Z][Y] != ObjEnum::VAZIO;
-      break;
+    /*case 1:
+      return mapa->andares[a].andares[k].grid[Z+1][X-1] != ObjEnum::VAZIO ||
+             mapa->andares[a].andares[k].grid[Z+1][X] != ObjEnum::VAZIO;
+      break;*/
     case 2:
-        return matrizMapa[X+1][Z][Y] != ObjEnum::VAZIO;
+        return mapa->andares[a].andares[k].grid[Z][X+1] != ObjEnum::VAZIO || mapa->andares[a].andares[k].grid[Z+1][X+1] != ObjEnum::VAZIO;
         break;
-    case 3:
-        return  matrizMapa[X+1][Z][Y] != ObjEnum::VAZIO ||
-                matrizMapa[X+1][Z+1][Y] != ObjEnum::VAZIO;
-        break;
+  /*  case 3:
+        return  mapa->andares[a].andares[k].grid[Z+1][X] != ObjEnum::VAZIO ||
+                mapa->andares[a].andares[k].grid[Z+1][X+1] != ObjEnum::VAZIO;
+        break;*/
     case 4:
-        return matrizMapa[X][Z+1][Y] != ObjEnum::VAZIO;
+        return mapa->andares[a].andares[k].grid[Z+1][X] != ObjEnum::VAZIO;// || Zaux % (FATOR_TAMANHO_MAPA*2) == 0;
         break;
-    case 5:
-        return matrizMapa[X-1][Z-1][Y] != ObjEnum::VAZIO ||
-                matrizMapa[X-1][Z][Y] != ObjEnum::VAZIO;
-        break;
+    /*case 5:
+        return mapa->andares[a].andares[k].grid[Z-1][X-1] != ObjEnum::VAZIO ||
+                mapa->andares[a].andares[k].grid[Z-1][X] != ObjEnum::VAZIO;
+        break;*/
     case 6:
-        X--;
-        return  matrizMapa[X][Z][Y] != ObjEnum::VAZIO;
+        return  mapa->andares[a].andares[k].grid[Z][X-1] != ObjEnum::VAZIO || mapa->andares[a].andares[k].grid[Z+1][X-1] != ObjEnum::VAZIO;
         break;
-    case 7:
-        return matrizMapa[X-1][Z][Y] != ObjEnum::VAZIO ||
-                matrizMapa[X-1][Z+1][Y]!= ObjEnum::VAZIO;
-        break;
+   /* case 7:
+        return mapa->andares[a].andares[k].grid[Z-1][X] != ObjEnum::VAZIO ||
+                mapa->andares[a].andares[k].grid[Z-1][X+1]!= ObjEnum::VAZIO;
+        break;*/
 
     }
     return false;
@@ -811,20 +795,20 @@ void updateState()
         {
             if (hacolisao(posX + speedX, posZ + speedZ,posicaoJogador.y)==false)
             {
-                posX += 2*speedX;
-                posZ += 2*speedZ;
+                posX += FATOR_TAMANHO_MAPA*5*speedX;
+                posZ += FATOR_TAMANHO_MAPA*5*speedZ;
             }
             else
             {
                 if (hacolisao(posX + speedX, posZ, posicaoJogador.y)==false)
                 {
-                    posX += 2*speedX;
+                    posX += FATOR_TAMANHO_MAPA*speedX;
                 }
                 else
                 {
                     if (hacolisao(posX, posZ + speedZ, posicaoJogador.y)==false)
                     {
-                        posZ += 2*speedZ;
+                        posZ += FATOR_TAMANHO_MAPA*speedZ;
                     }
                 }
             }
@@ -834,15 +818,15 @@ void updateState()
 
             if (hacolisao(posX - speedX, posZ - speedZ,posicaoJogador.y)==false)
             {
-                posX -= speedX;
-                posZ -= speedZ;
+                posX -= FATOR_TAMANHO_MAPA*speedX;
+                posZ -= FATOR_TAMANHO_MAPA*speedZ;
             }
             else
             {
                 if (hacolisao(posX - speedX, posZ,posicaoJogador.y)==false)
-                    posX -= speedX;
+                    posX -= FATOR_TAMANHO_MAPA*speedX;
                 else if (hacolisao(posX, posZ - speedZ,posicaoJogador.y)==false)
-                        posZ -= speedZ;
+                        posZ -= FATOR_TAMANHO_MAPA*speedZ;
             }
         }
 
@@ -859,8 +843,14 @@ void updateState()
 
     if(spacePressed)
     {
-//        Bloco* b = matrizMapa[posX][posZ][posicaoJogador.y];
-  //      b->destroyied = true;
+        std::pair<int,int> par = separaAltura(posicaoJogador.y);
+        int k = par.first;
+        int a = par.second;
+        int Z = (int)std::round(posicaoJogador.getZ() - 0.5) + 12;
+        int X = (int)std::round(posicaoJogador.getX() - 0.5) + 12;
+
+        Bloco* b = blocosMap[std::make_tuple(X,Z,posicaoJogador.y)];
+        b->destroyied = true;
         spacePressed = false;
     }
 	if(leftPressed)
@@ -1103,9 +1093,9 @@ int main(int argc, char **argv)
 	/**
 	Register mouse events handlers
 	*/
-	glutMouseFunc(onMouseButton);
+	/*glutMouseFunc(onMouseButton);
 	glutMotionFunc(onMouseMove);
-	glutPassiveMotionFunc(onMousePassiveMove);
+	glutPassiveMotionFunc(onMousePassiveMove);*/
 
 	/**
 	Register keyboard events handlers
