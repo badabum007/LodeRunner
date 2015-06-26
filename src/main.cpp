@@ -595,10 +595,9 @@ void enableFog(void)
 {
 }
 
-bool hacolisao (float floatX, float floatZ, int Y){
-
-
-    int direction = round(std::abs(int(roty) % 360)/45.0);
+int getDirection()
+{
+     int direction = round(std::abs(int(roty) % 360)/45.0);
     if (direction == 8)
         direction = 0;
 
@@ -608,6 +607,13 @@ bool hacolisao (float floatX, float floatZ, int Y){
         direction = (6+direction) % 8;
     if (rightPressed)
         direction = (2+direction) % 8;
+    return direction;
+}
+
+bool hacolisao (float floatX, float floatZ, int Y){
+
+
+    int direction = getDirection();
     int Zaux = (int)(std::round((floatZ - 0.5)));
     int Xaux =  + ((int) std::round((floatX - 0.5)));
     int Z =  Zaux  / (FATOR_TAMANHO_MAPA*2) ;
@@ -619,20 +625,6 @@ bool hacolisao (float floatX, float floatZ, int Y){
 
 
     bool helper = false;
-    /*for (int i = -1; i <= 1; ++i)
-    {
-        for (int j = -1; j <= 1; ++j)
-        {
-            int l = i + x;
-            int k = j + z;
-            if (l < 0 || l >= 24 || k < 0 || k >= 0 || (i == 0 && j == 0)) continue;
-            if (sceneMatrix[l*24+k] == ENEMY)
-            {
-                pengoDead = true;
-                return false;
-            }
-        }
-    }*/
     Y = andarNivel;
     std::pair<int,int> par = separaAltura(Y);
    int k = par.first, a = par.second;
@@ -644,32 +636,15 @@ bool hacolisao (float floatX, float floatZ, int Y){
     case 0:
         return mapa->andares[a].andares[k].grid[Z-1][X] != ObjEnum::VAZIO || mapa->andares[a].andares[k].grid[Z-1][X+1] != ObjEnum::VAZIO;
         break;
-    /*case 1:
-      return mapa->andares[a].andares[k].grid[Z+1][X-1] != ObjEnum::VAZIO ||
-             mapa->andares[a].andares[k].grid[Z+1][X] != ObjEnum::VAZIO;
-      break;*/
     case 2:
         return mapa->andares[a].andares[k].grid[Z][X+1] != ObjEnum::VAZIO || mapa->andares[a].andares[k].grid[Z+1][X+1] != ObjEnum::VAZIO;
         break;
-  /*  case 3:
-        return  mapa->andares[a].andares[k].grid[Z+1][X] != ObjEnum::VAZIO ||
-                mapa->andares[a].andares[k].grid[Z+1][X+1] != ObjEnum::VAZIO;
-        break;*/
     case 4:
         return mapa->andares[a].andares[k].grid[Z+1][X] != ObjEnum::VAZIO;// || Zaux % (FATOR_TAMANHO_MAPA*2) == 0;
         break;
-    /*case 5:
-        return mapa->andares[a].andares[k].grid[Z-1][X-1] != ObjEnum::VAZIO ||
-                mapa->andares[a].andares[k].grid[Z-1][X] != ObjEnum::VAZIO;
-        break;*/
     case 6:
         return  mapa->andares[a].andares[k].grid[Z][X-1] != ObjEnum::VAZIO || mapa->andares[a].andares[k].grid[Z+1][X-1] != ObjEnum::VAZIO;
         break;
-   /* case 7:
-        return mapa->andares[a].andares[k].grid[Z-1][X] != ObjEnum::VAZIO ||
-                mapa->andares[a].andares[k].grid[Z-1][X+1]!= ObjEnum::VAZIO;
-        break;*/
-
     }
     return false;
 }
@@ -843,15 +818,31 @@ void updateState()
 
     if(spacePressed)
     {
+
+        int direction = getDirection();
         std::pair<int,int> par = separaAltura(posicaoJogador.y);
         int k = par.first;
         int a = par.second;
-        int Z = (int)std::round(posicaoJogador.getZ() - 0.5) + 12;
-        int X = (int)std::round(posicaoJogador.getX() - 0.5) + 12;
+        int Z = (int)(std::round((posZ - 0.5))) / (FATOR_TAMANHO_MAPA*2);
+        int X =  + ((int) std::round((posX - 0.5))) / (FATOR_TAMANHO_MAPA*2);
 
-        Bloco* b = blocosMap[std::make_tuple(X,Z,posicaoJogador.y)];
-        b->destroyied = true;
-        spacePressed = false;
+         Bloco* b;
+
+        if(direction == 0)
+            b = blocosMap[std::make_tuple(Z-3,X,-2 + 2*(k-1) + DISTANCIA_ANDARES*a)];
+        if(direction == 2)
+            b = blocosMap[std::make_tuple(Z,X+3,-2 + 2*(k-1) + DISTANCIA_ANDARES*a)];
+        if(direction == 4)
+            b = blocosMap[std::make_tuple(Z+3,X,-2 + 2*(k-1) + DISTANCIA_ANDARES*a)];
+        if(direction == 6)
+            b = blocosMap[std::make_tuple(Z,X-3,-2 + 2*(k-1) + DISTANCIA_ANDARES*a)];
+
+        if(b != NULL)
+        {
+            b->destroyied = true;
+            spacePressed = false;
+        }
+
     }
 	if(leftPressed)
     {
