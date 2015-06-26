@@ -73,7 +73,7 @@ seja uma spotlight;
 #define MAX_FLOORS 20
 #define DISTANCIA_ANDARES 12
 
-#define MAX_PLANSIZE 27
+#define MAX_PLANSIZE 41
 #define MIN_PLANSIZE 11
 
 using std::vector;
@@ -110,8 +110,8 @@ void setTextureToOpengl();
 /**
 Screen dimensions
 */
-int windowWidth = 600;
-int windowHeight = 480;
+int windowWidth = 1200;
+int windowHeight = 960;
 
 /**
 Screen position
@@ -136,7 +136,7 @@ bool downPressed = false;
 
 bool spacePressed = false;
 
-float speedX = 0.0f;
+float speedX = 10.0f;
 float speedY = 0.0f;
 float speedZ = 0.0f;
 
@@ -149,7 +149,7 @@ variavel auxiliar pra dar variação na altura do ponto de vista ao AndarBitmap.
 */
 float headPosAux = 0.0f;
 
-float maxSpeed = 0.25f;
+float maxSpeed = 10.25f;
 
 float planeSize = 24.0f;
 
@@ -189,8 +189,6 @@ GLuint      texture;         /* Texture object */
 
 bool crouched = false;
 bool running = false;
-bool jumping = false;
-float jumpSpeed = 0.06;
 float gravity = 0.004;
 float heightLimit = 0.2;
 float posYOffset = 0.2;
@@ -275,7 +273,7 @@ void renderMapa()
         for(int j=0;j<GRID_WIDTH;j++)
         {
             glPushMatrix();
-            glScalef(0.5,0.5,0.5);
+          //  glScalef(0.5,0.5,0.5);
             glTranslatef(0.0 + 2*i,-4,0.0 + 2*j);
             blocoIndest.Draw(SMOOTH_MATERIAL_TEXTURE);
             glPopMatrix();
@@ -283,6 +281,8 @@ void renderMapa()
         }
 
     }
+
+
 
     for(int a=0;a < mapa->andares.size();a++)
     {
@@ -298,7 +298,7 @@ void renderMapa()
                     blocosMap.insert(std::make_pair(std::make_tuple(i,j,k),b));
 
                     glPushMatrix();
-                    glScalef(0.5,0.5,0.5);
+                 //   glScalef(0.5,0.5,0.5);
                     glTranslatef(0.0 + 2*i,-2 + 2*k + DISTANCIA_ANDARES*a,0.0 + 2*j);
 
                     if(mapa->andares[a].andares[k].grid[i][j] == ObjEnum::BLOCOINDEST)
@@ -561,6 +561,8 @@ bool hacolisao (float floatX, float floatZ, int Y){
 
     X = X - 11;
     Z = Z - 11;
+    X = X/2;
+    Z = Z/2;
     bool helper = false;
     /*for (int i = -1; i <= 1; ++i)
     {
@@ -579,6 +581,7 @@ bool hacolisao (float floatX, float floatZ, int Y){
     Y = andarNivel;
     std::cout << "X: " << X << "   Y: " << Y << "  Z: " << Z << std::endl;
     std::cout << "DIRECAO: " << direction << std::endl;
+   // return false;
     switch (direction)
     {
     case 0:
@@ -604,7 +607,7 @@ bool hacolisao (float floatX, float floatZ, int Y){
         break;
     case 6:
         X--;
-        return  matrizMapa[X][Z+1][Y] != ObjEnum::VAZIO;
+        return  matrizMapa[X][Z][Y] != ObjEnum::VAZIO;
         break;
     case 7:
         return matrizMapa[X-1][Z][Y] != ObjEnum::VAZIO ||
@@ -713,6 +716,7 @@ void updateCamera()
 void updateState()
 {
 
+    std::cout << "Speed: " << speedX << "  POSX: " << posX << std::endl;
 	if (upPressed || downPressed)
     {
 
@@ -735,20 +739,20 @@ void updateState()
         {
             if (hacolisao(posX + speedX, posZ + speedZ,posicaoJogador.y)==false)
             {
-                posX += speedX;
-                posZ += speedZ;
+                posX += 2*speedX;
+                posZ += 2*speedZ;
             }
             else
             {
                 if (hacolisao(posX + speedX, posZ, posicaoJogador.y)==false)
                 {
-                    posX += speedX;
+                    posX += 2*speedX;
                 }
                 else
                 {
                     if (hacolisao(posX, posZ + speedZ, posicaoJogador.y)==false)
                     {
-                        posZ += speedZ;
+                        posZ += 2*speedZ;
                     }
                 }
             }
@@ -795,7 +799,6 @@ void updateState()
 	if (posY < heightLimit) {
 		posY = heightLimit;
 		speedY = 0.0f;
-		jumping = false;
 	} else {
 		speedY -= gravity;
 
@@ -898,9 +901,9 @@ void onKeyDown(unsigned char key, int x, int y) {
 	//printf("%d \n", key);
 	switch (key) {
 		case 32: //space
-			if (!spacePressed && !jumping) {
-				jumping = true;
-				speedY = jumpSpeed;
+			if (!spacePressed)
+            {
+
 			}
 			spacePressed = true;
 			break;
