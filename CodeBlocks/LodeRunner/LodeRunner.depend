@@ -595,7 +595,7 @@
 	<GL/glut.h>
 	<math.h>
 
-1435526643 source:c:\users\usuario\desktop\fcg\loderunner\src\main.cpp
+1435531019 source:c:\users\usuario\desktop\fcg\loderunner\src\main.cpp
 	<windows.h>
 	<stdio.h>
 	<stdlib.h>
@@ -730,13 +730,13 @@
 	"../include/MapaBitmap.h"
 	"../include/ObjEnum.h"
 
-1435523059 source:c:\users\usuario\desktop\fcg\loderunner\src\bloco.cpp
+1435529057 source:c:\users\usuario\desktop\fcg\loderunner\src\bloco.cpp
 	"../include/Bloco.h"
 	"../include/ObjEnum.h"
 	<ctime>
 	<iostream>
 
-1435523058 c:\users\usuario\desktop\fcg\loderunner\include\bloco.h
+1435529306 c:\users\usuario\desktop\fcg\loderunner\include\bloco.h
 	<iostream>
 	<vector>
 	<tuple>
@@ -749,7 +749,7 @@
 	"../include/Personagem.h"
 	"../include/ObjEnum.h"
 
-1435525426 c:\users\usuario\desktop\fcg\loderunner\include\personagem.h
+1435530048 c:\users\usuario\desktop\fcg\loderunner\include\personagem.h
 	<iostream>
 	<vector>
 	"../include/ObjEnum.h"

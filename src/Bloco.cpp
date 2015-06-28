@@ -34,10 +34,10 @@ void Bloco::reconstroi()
     time_t now;
     time(&now);
 
-    std::cout << difftime(now, this->tempoInicioDest) << std::endl;
+    //std::cout << difftime(now, this->tempoInicioDest) << std::endl;
     if(difftime(now, this->tempoInicioDest) > TEMPO_BLOCO_DESTRUIDO)
     {
-        std::cout << "spwanando";
+        //std::cout << "spwanando";
         this->destroyied = false;
     }
 

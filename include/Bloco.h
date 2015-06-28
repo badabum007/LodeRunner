@@ -7,7 +7,7 @@
 #include <ctime>
 #include "ObjEnum.h"
 
-#define TEMPO_BLOCO_DESTRUIDO 2
+#define TEMPO_BLOCO_DESTRUIDO 4000
 
 
 class Bloco

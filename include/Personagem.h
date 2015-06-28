@@ -25,6 +25,7 @@ class Personagem
         bool descendoEscada = false;
         bool moving = false;
         bool valid = true;
+        bool caindo = false;
         std::pair<float,float> targetPosition;
         Point3D posicao;
 
