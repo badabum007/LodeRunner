@@ -206,6 +206,7 @@ int andarNivel = 1;
 Camera primeiraPessoaCam, terceiraPessoaCam, cimaCam;
 C3DObject blocoIndest, blocoDest, ouro, personagem, escadaSobe, escadaDesce;
 
+int ourosColetados=0, totalOuros=0;
 list<Personagem*> inimigos;
 list<Bloco*> blocos;
 map<std::tuple<int,int,int>, Bloco*> blocosMap;
@@ -305,9 +306,15 @@ void initBlocos()
                     else if(value == ObjEnum::BLOCOINDEST)
                         b->tipo = ObjEnum::BLOCOINDEST;
                     else if(value == ObjEnum::OURO)
+                    {
+                        totalOuros += 1;
                         b->tipo = ObjEnum::OURO;
+                    }
+
                     else if(value == ObjEnum::ESCADASOBE)
                         b->tipo = ObjEnum::ESCADASOBE;
+                    else if(value == ObjEnum::ESCADADESCE)
+                        b->tipo = ObjEnum::ESCADADESCE;
 
                     blocosMap.insert(std::make_pair(std::make_tuple(i,j,-2 + 2*k+ DISTANCIA_ANDARES*a),b));
 
@@ -385,6 +392,12 @@ void renderMapa()
         {
            // b->tipo = ObjEnum::ESCADASOBE;
             escadaSobe.Draw(SMOOTH_MATERIAL_TEXTURE);
+           // matrizMapa[i][j][k + a] = ObjEnum::ESCADASOBE;
+        }
+        if(bl->tipo == ObjEnum::ESCADADESCE)
+        {
+           // b->tipo = ObjEnum::ESCADASOBE;
+            escadaDesce.Draw(SMOOTH_MATERIAL_TEXTURE);
            // matrizMapa[i][j][k + a] = ObjEnum::ESCADASOBE;
         }
         if(bl->tipo == ObjEnum::VAZIO)
@@ -659,7 +672,7 @@ bool hacolisao (float floatX, float floatZ, float Y)
         }
         break;
     case 4:
-        if( mapa->andares[a].andares[k].grid[Z+1][X] == ObjEnum::ESCADASOBE)
+        if(mapa->andares[a].andares[k].grid[Z+1][X] == ObjEnum::ESCADASOBE)
         {
             me->subindoEscada = true;
             return true;
@@ -838,6 +851,17 @@ void updateCamera()
 
 void updateState()
 {
+
+    int Zaux = (int)(std::round((me->posicao.z - 0.5)));
+    int Xaux =  + ((int) std::round((me->posicao.x - 0.5)));
+    int Z =  Zaux  / (FATOR_TAMANHO_MAPA*2) ;
+    int X = Xaux  / (FATOR_TAMANHO_MAPA*2);
+    std::pair<int,int> par = separaAltura(me->posicao.y);
+    int k = par.first, a = par.second;
+
+
+
+
     if(me->subindoEscada)
     {
         me->posicao.y += 0.4;
@@ -852,13 +876,29 @@ void updateState()
     if(me->descendoEscada)
     {
         me->posicao.y -= 0.4;
-        if(me->posicao.y >= (-2 + 2+ DISTANCIA_ANDARES*(me->andarAtual+1)) * FATOR_TAMANHO_MAPA)
+        if(me->posicao.y <= (-2 + 2+ DISTANCIA_ANDARES*(me->andarAtual-1)) * FATOR_TAMANHO_MAPA)
         {
             me->descendoEscada = false;
             me->andarAtual--;
         }
 
         return;
+    }
+
+    if(me->caindo)
+    {
+        me->posicao.y -= 0.7;
+    }
+
+    if(me->posicao.y <= (-2 + 2+ DISTANCIA_ANDARES*(me->andarAtual-1)) * FATOR_TAMANHO_MAPA)
+    {
+        me->andarAtual--;
+        me->caindo = false;
+    }
+
+    if(mapa->andares[a].andares[k - 1].grid[Z][X] == ObjEnum::VAZIO)
+    {
+       me->caindo = true;
     }
 
 
@@ -925,39 +965,11 @@ void updateState()
 		}
 	}
 
-
-	if(rpressed)
-    {
-        int direction = getDirection();
-        std::pair<int,int> par = separaAltura(posicaoJogador.y);
-        int k = par.first;
-        int a = par.second;
-        int Z = (int)(std::round((posZ - 0.5))) / (FATOR_TAMANHO_MAPA*2);
-        int X =  + ((int) std::round((posX - 0.5))) / (FATOR_TAMANHO_MAPA*2);
-
-        Bloco* b;
-
-        if(direction == 0)
-            b = blocosMap[std::make_tuple(Z-3,X,-2 + 2*(k-1) + DISTANCIA_ANDARES*a)];
-        if(direction == 2)
-            b = blocosMap[std::make_tuple(Z,X+3,-2 + 2*(k-1) + DISTANCIA_ANDARES*a)];
-        if(direction == 4)
-            b = blocosMap[std::make_tuple(Z+3,X,-2 + 2*(k-1) + DISTANCIA_ANDARES*a)];
-        if(direction == 6)
-            b = blocosMap[std::make_tuple(Z,X-3,-2 + 2*(k-1) + DISTANCIA_ANDARES*a)];
-
-        if(b != NULL && b->tipo == ObjEnum::ESCADASOBE)
-        {
-
-            rpressed = false;
-        }
-    }
-
     if(spacePressed)
     {
 
         int direction = getDirection();
-        std::pair<int,int> par = separaAltura(posicaoJogador.y);
+        std::pair<int,int> par = separaAltura(me->posicao.y);
         int k = par.first;
         int a = par.second;
         int Z = (int)(std::round((me->posicao.z - 0.5))) / (FATOR_TAMANHO_MAPA*2);
@@ -993,12 +1005,10 @@ void updateState()
     }
 
 	posY += speedY;
-	if (posY < heightLimit)
-    {
+	if (posY < heightLimit) {
 		posY = heightLimit;
 		speedY = 0.0f;
-	} else
-	{
+	} else {
 		speedY -= gravity;
 	}
 
@@ -1216,7 +1226,6 @@ int main(int argc, char **argv)
     Point3D ponto;
     ponto.x = 0; ponto.y = 0; ponto.z = 1;
     me = new Personagem(ponto);
-    andarNivel = 1;
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
