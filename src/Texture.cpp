@@ -4,7 +4,7 @@
 
 //#include "stdafx.h"
 
-#include "Texture.h"
+#include "../include/Texture.h"
 
 TGAHeader tgaheader;									// TGA header
 TGA tga;												// TGA image data

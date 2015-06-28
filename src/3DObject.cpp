@@ -2,7 +2,7 @@
 // handle de objetos
 //-----------------------------------------------------------------------------
 
-#include "3DObject.h"
+#include "../include/3DObject.h"
 #include <malloc.h>
 
 

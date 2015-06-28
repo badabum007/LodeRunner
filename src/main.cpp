@@ -73,7 +73,7 @@ seja uma spotlight;
 #define MAX_FLOORS 20
 #define DISTANCIA_ANDARES 12
 
-#define FATOR_TAMANHO_MAPA 4
+
 
 
 #define MAX_PLANSIZE 15
@@ -132,6 +132,7 @@ int mouseLastY = 0;
 float roty = 0.0f;
 float rotx = 90.0f;
 
+bool rpressed = false;
 bool rightPressed = false;
 bool leftPressed = false;
 bool upPressed = false;
@@ -196,6 +197,8 @@ float gravity = 0.004;
 float heightLimit = 0.2;
 float posYOffset = 0.2;
 
+Personagem* me;
+
 float backgrundColor[4] = {0.0f,0.0f,0.0f,1.0f};
 
 Point3D posicaoJogador;
@@ -223,8 +226,8 @@ void setWindow() {
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(posX,posY + posYOffset + 0.025 * std::abs(sin(headPosAux*PI/180)),posZ,
-		posX + sin(roty*PI/180),posY + posYOffset + 0.025 * std::abs(sin(headPosAux*PI/180)) + cos(rotx*PI/180),posZ -cos(roty*PI/180),
+	gluLookAt(me->posicao.x,me->posicao.y + posYOffset + 0.025 * std::abs(sin(headPosAux*PI/180)),me->posicao.z,
+		me->posicao.x + sin(roty*PI/180),me->posicao.y + posYOffset + 0.025 * std::abs(sin(headPosAux*PI/180)) + cos(rotx*PI/180),me->posicao.z -cos(roty*PI/180),
 		0.0,1.0,0.0);
 }
 
@@ -233,19 +236,19 @@ Atualiza a posição e orientação da camera
 */
 void updateCam() {
 
-	gluLookAt(posX,posY + posYOffset + 0.025 * std::abs(sin(headPosAux*PI/180)),posZ,
-		posX + sin(roty*PI/180),posY + posYOffset + 0.025 * std::abs(sin(headPosAux*PI/180)) + cos(rotx*PI/180),posZ -cos(roty*PI/180),
+	gluLookAt(me->posicao.x,me->posicao.y + posYOffset + 0.025 * std::abs(sin(headPosAux*PI/180)),me->posicao.z,
+		me->posicao.x + sin(roty*PI/180),me->posicao.y + posYOffset + 0.025 * std::abs(sin(headPosAux*PI/180)) + cos(rotx*PI/180),me->posicao.z -cos(roty*PI/180),
 		0.0,1.0,0.0);
 
 	// atualiza a posição do listener e da origen do som, são as mesmas da camera, já que os passos vem de onde o personagem está
-	listenerPos[0] = posX;
-	listenerPos[1] = posY;
-	listenerPos[2] = posZ;
-	source0Pos[0] = posX;
-	source0Pos[1] = posY;
-	source0Pos[2] = posZ;
+	listenerPos[0] = me->posicao.x;
+	listenerPos[1] = me->posicao.y;
+	listenerPos[2] = me->posicao.z;
+	source0Pos[0] = me->posicao.x;
+	source0Pos[1] = me->posicao.y;
+	source0Pos[2] = me->posicao.z;
 
-    GLfloat light_position1[] = {posX, posY, posZ, 1.0 };
+    GLfloat light_position1[] = {me->posicao.x, me->posicao.y, me->posicao.z, 1.0 };
     glLightfv(GL_LIGHT0, GL_POSITION, light_position1);
 
 
@@ -273,7 +276,7 @@ void initBlocos()
     {
         for(int k=0;k<2;k++)
         {
-            std::cout << "A: " << a << "  K: " << k << std::endl;
+            // std::cout << "A: " << a << "  K: " << k << std::endl;
             for(int i=0; i<GRID_HEIGHT; i++)
             {
                 for(int j=0; j<GRID_WIDTH; j++)
@@ -296,7 +299,7 @@ void initBlocos()
                     Bloco* b = new Bloco(std::make_tuple(i,j,-2 + 2*k+ DISTANCIA_ANDARES*a));
                     blocos.push_back(b);
                     ObjEnum value = mapa->andares[a].andares[k].grid[i][j];
-                    std::cout << (int)mapa->andares[a].andares[k].grid[i][j] << " ";
+                    //std::cout << (int)mapa->andares[a].andares[k].grid[i][j] << " ";
                     if(value == ObjEnum::BLOCODEST)
                         b->tipo = ObjEnum::BLOCODEST;
                     else if(value == ObjEnum::BLOCOINDEST)
@@ -457,7 +460,9 @@ void initModel() {
 	ouro.Init();
 	ouro.Load("../../models/ouro.obj");
 	escada.Init();
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	escada.Load("../../models/escada.obj");
+
 
 
 	printf("Models ok. \n \n \n");
@@ -504,13 +509,13 @@ void initSound() {
         printf("init - no errors after alGenSources\n");
     }
 
-	listenerPos[0] = posX;
-	listenerPos[1] = posY;
-	listenerPos[2] = posZ;
+	listenerPos[0] = me->posicao.x;
+	listenerPos[1] = me->posicao.y;
+	listenerPos[2] = me->posicao.z;
 
-	source0Pos[0] = posX;
-	source0Pos[1] = posY;
-	source0Pos[2] = posZ;
+	source0Pos[0] = me->posicao.x;
+	source0Pos[1] = me->posicao.y;
+	source0Pos[2] = me->posicao.z;
 
 	alListenerfv(AL_POSITION,listenerPos);
     alListenerfv(AL_VELOCITY,listenerVel);
@@ -569,7 +574,7 @@ void initTexture(void)
     glTexImage2D(type, 0, 4, info->bmiHeader.biWidth, info->bmiHeader.biHeight,
                   0, GL_RGBA, GL_UNSIGNED_BYTE, rgba );
 */
-
+    glEnable(GL_BLEND);
     printf("Textura %d\n", texture);
 	printf("Textures ok.\n\n", texture);
 
@@ -613,8 +618,8 @@ int getDirection()
     return direction;
 }
 
-bool hacolisao (float floatX, float floatZ, int Y){
-
+bool hacolisao (float floatX, float floatZ, int Y)
+{
 
     int direction = getDirection();
     int Zaux = (int)(std::round((floatZ - 0.5)));
@@ -631,9 +636,44 @@ bool hacolisao (float floatX, float floatZ, int Y){
     Y = andarNivel;
     std::pair<int,int> par = separaAltura(Y);
    int k = par.first, a = par.second;
-    std::cout << "X: " << X << "   Zaux: " << Zaux << "  Z: " << Z << std::endl;
-    std::cout << "DIRECAO: " << direction << std::endl;
+    //std::cout << "X: " << X << "   Zaux: " << Zaux << "  Z: " << Z << std::endl;
+   // std::cout << "DIRECAO: " << direction << std::endl;
  //   return false;
+    switch (direction)
+    {
+    case 0:
+        if(mapa->andares[a].andares[k].grid[Z-1][X] == ObjEnum::ESCADA || mapa->andares[a].andares[k].grid[Z-1][X+1] == ObjEnum::ESCADA)
+        {
+            me->subindoEscada = true;
+            return true;
+        }
+        break;
+    case 2:
+        if(mapa->andares[a].andares[k].grid[Z][X+1] == ObjEnum::ESCADA || mapa->andares[a].andares[k].grid[Z+1][X+1] == ObjEnum::ESCADA)
+        {
+            me->subindoEscada = true;
+            return true;
+        }
+        return mapa->andares[a].andares[k].grid[Z][X+1] != ObjEnum::VAZIO || mapa->andares[a].andares[k].grid[Z+1][X+1] != ObjEnum::VAZIO;
+        break;
+    case 4:
+        if( mapa->andares[a].andares[k].grid[Z+1][X] == ObjEnum::ESCADA)
+        {
+            me->subindoEscada = true;
+            return true;
+        }
+        break;
+    case 6:
+        if( mapa->andares[a].andares[k].grid[Z][X-1] == ObjEnum::ESCADA || mapa->andares[a].andares[k].grid[Z+1][X-1] == ObjEnum::ESCADA)
+        {
+            me->subindoEscada = true;
+            return true;
+        }
+        break;
+    default:
+        break;
+    }
+
     switch (direction)
     {
     case 0:
@@ -650,6 +690,11 @@ bool hacolisao (float floatX, float floatZ, int Y){
         break;
     }
     return false;
+}
+
+void sobeEscada()
+{
+
 }
 
 void renderFloor() {
@@ -738,20 +783,24 @@ void updateCamera()
 
 
 	// atualiza a posição do listener e da origen do som, são as mesmas da camera, já que os passos vem de onde o personagem está
-	listenerPos[0] = posX;
-	listenerPos[1] = posY;
-	listenerPos[2] = posZ;
-	source0Pos[0] = posX;
-	source0Pos[1] = posY;
-	source0Pos[2] = posZ;
+	listenerPos[0] = me->posicao.x;
+	listenerPos[1] = me->posicao.y;
+	listenerPos[2] = me->posicao.z;
+	source0Pos[0] = me->posicao.x;
+	source0Pos[1] = me->posicao.y;
+	source0Pos[2] = me->posicao.z;
 }
 
 
 void updateState()
 {
-
+    if(me->subindoEscada)
+    {
+        me->posicao.z += 0.1;
+        return;
+    }
    // std::cout << "Speed: " << speedX << "  POSX: " << posX << std::endl;
-	if (upPressed || downPressed)
+	if ((upPressed || downPressed))
     {
 
 		if (running)
@@ -771,44 +820,39 @@ void updateState()
 
         if (upPressed)
         {
-            if (hacolisao(posX + speedX, posZ + speedZ,posicaoJogador.y)==false)
-            {
-                posX += FATOR_TAMANHO_MAPA*5*speedX;
-                posZ += FATOR_TAMANHO_MAPA*5*speedZ;
-            }
+            if (hacolisao(me->posicao.x + speedX, me->posicao.z + speedZ,me->posicao.y) == false)
+                me->caminha(speedX, speedZ);
             else
             {
-                if (hacolisao(posX + speedX, posZ, posicaoJogador.y)==false)
+                if (hacolisao(me->posicao.x + speedX, me->posicao.z, me->posicao.y)==false)
                 {
-                    posX += FATOR_TAMANHO_MAPA*speedX;
+                    me->caminha(speedX, 0);
                 }
                 else
                 {
-                    if (hacolisao(posX, posZ + speedZ, posicaoJogador.y)==false)
+                    if (hacolisao(me->posicao.x, me->posicao.z + speedZ, me->posicao.y)==false)
                     {
-                        posZ += FATOR_TAMANHO_MAPA*speedZ;
+                        me->caminha(0, speedZ);
                     }
                 }
             }
         } else
         {
-
-
-            if (hacolisao(posX - speedX, posZ - speedZ,posicaoJogador.y)==false)
+            if (hacolisao(me->posicao.x - speedX, me->posicao.z - speedZ,me->posicao.y)==false)
             {
-                posX -= FATOR_TAMANHO_MAPA*speedX;
-                posZ -= FATOR_TAMANHO_MAPA*speedZ;
+                me->caminha(-1*speedX, -1*speedZ);
             }
             else
             {
-                if (hacolisao(posX - speedX, posZ,posicaoJogador.y)==false)
-                    posX -= FATOR_TAMANHO_MAPA*speedX;
-                else if (hacolisao(posX, posZ - speedZ,posicaoJogador.y)==false)
-                        posZ -= FATOR_TAMANHO_MAPA*speedZ;
+                if (hacolisao(me->posicao.x - speedX, me->posicao.z,me->posicao.y)==false)
+                    me->caminha(-1*speedX, 0);
+                else if (hacolisao(me->posicao.x, me->posicao.z - speedZ,me->posicao.y)==false)
+                       me->caminha(0, -1*speedZ);;
             }
         }
 
-	} else
+	}
+	else
 	{
 		// parou de AndarBitmap, para com o efeito de "sobe e desce"
 		headPosAux = fmod(headPosAux, 90) - 1 * headPosAux / 90;
@@ -819,6 +863,34 @@ void updateState()
 		}
 	}
 
+
+	if(rpressed)
+    {
+        int direction = getDirection();
+        std::pair<int,int> par = separaAltura(posicaoJogador.y);
+        int k = par.first;
+        int a = par.second;
+        int Z = (int)(std::round((posZ - 0.5))) / (FATOR_TAMANHO_MAPA*2);
+        int X =  + ((int) std::round((posX - 0.5))) / (FATOR_TAMANHO_MAPA*2);
+
+        Bloco* b;
+
+        if(direction == 0)
+            b = blocosMap[std::make_tuple(Z-3,X,-2 + 2*(k-1) + DISTANCIA_ANDARES*a)];
+        if(direction == 2)
+            b = blocosMap[std::make_tuple(Z,X+3,-2 + 2*(k-1) + DISTANCIA_ANDARES*a)];
+        if(direction == 4)
+            b = blocosMap[std::make_tuple(Z+3,X,-2 + 2*(k-1) + DISTANCIA_ANDARES*a)];
+        if(direction == 6)
+            b = blocosMap[std::make_tuple(Z,X-3,-2 + 2*(k-1) + DISTANCIA_ANDARES*a)];
+
+        if(b != NULL && b->tipo == ObjEnum::ESCADA)
+        {
+
+            rpressed = false;
+        }
+    }
+
     if(spacePressed)
     {
 
@@ -826,8 +898,8 @@ void updateState()
         std::pair<int,int> par = separaAltura(posicaoJogador.y);
         int k = par.first;
         int a = par.second;
-        int Z = (int)(std::round((posZ - 0.5))) / (FATOR_TAMANHO_MAPA*2);
-        int X =  + ((int) std::round((posX - 0.5))) / (FATOR_TAMANHO_MAPA*2);
+        int Z = (int)(std::round((me->posicao.z - 0.5))) / (FATOR_TAMANHO_MAPA*2);
+        int X =  + ((int) std::round((me->posicao.x - 0.5))) / (FATOR_TAMANHO_MAPA*2);
 
          Bloco* b;
 
@@ -944,7 +1016,8 @@ void onMouseMove(int x, int y) {
 /**
 Mouse move with no button pressed event handler
 */
-void onMousePassiveMove(int x, int y) {
+void onMousePassiveMove(int x, int y)
+{
 
 	roty += (x - mouseLastX);
 
@@ -967,9 +1040,11 @@ void onMousePassiveMove(int x, int y) {
 /**
 Key press event handler
 */
-void onKeyDown(unsigned char key, int x, int y) {
+void onKeyDown(unsigned char key, int x, int y)
+{
 	//printf("%d \n", key);
-	switch (key) {
+	switch (key)
+	{
 		case 32: //space
 			if (!spacePressed)
             {
@@ -978,7 +1053,8 @@ void onKeyDown(unsigned char key, int x, int y) {
 			spacePressed = true;
 			break;
 		case 119: //w
-			if (!upPressed) {
+			if (!upPressed)
+            {
 				alSourcePlay(source[0]);
 			}
 			upPressed = true;
@@ -989,15 +1065,18 @@ void onKeyDown(unsigned char key, int x, int y) {
 		case 97: //a
 			leftPressed = true;
 			break;
+        case 'r':
+            rpressed = true;
+            break;
 		case 100: //d
 			rightPressed = true;
 			break;
 		case 99: //c
 			crouched = true;
 			break;
-		case 114: //r
+		/*case 114: //r
 			running = true;
-			break;
+			break;*/
 		default:
 			break;
 	}
@@ -1009,7 +1088,8 @@ void onKeyDown(unsigned char key, int x, int y) {
 Key release event handler
 */
 void onKeyUp(unsigned char key, int x, int y) {
-	switch (key) {
+	switch (key)
+	{
 		case 32: //space
 			spacePressed = false;
 			break;
@@ -1022,6 +1102,9 @@ void onKeyUp(unsigned char key, int x, int y) {
 		case 115: //s
 			downPressed = false;
 			break;
+        case 'r':
+            rpressed = false;
+            break;
 		case 97: //a
 			leftPressed = false;
 			break;
@@ -1031,9 +1114,9 @@ void onKeyUp(unsigned char key, int x, int y) {
 		case 99: //c
 			crouched = false;
 			break;
-		case 114: //r
+/*		case 114: //r
 			running = false;
-			break;
+			break;*/
 		case 27:
 			exit(0);
 			break;
@@ -1068,6 +1151,9 @@ void mainIdle() {
 
 int main(int argc, char **argv)
 {
+    Point3D ponto;
+    ponto.x = 0; ponto.y = 0; ponto.z = 1;
+    me = new Personagem(ponto);
     andarNivel = 1;
 
 	glutInit(&argc, argv);

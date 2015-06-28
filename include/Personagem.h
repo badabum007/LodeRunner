@@ -4,34 +4,30 @@
 #include <iostream>
 #include <vector>
 #include "../include/ObjEnum.h"
+#include "Point3D.h"
 #include <random>
 #include <chrono>
 #include <algorithm>
 
+#define FATOR_TAMANHO_MAPA 4
 
 class Personagem
 {
     public:
         Personagem();
-        Personagem(std::pair<int,int> matrixPosition, std::pair<float, float> screenPosition);
-        Personagem(int x, int y, float sX, float sY);
+        Personagem(Point3D);
         virtual ~Personagem();
-        void move_me(ObjEnum *, int, int);
+        void caminha(float, float);
         void keep_moving(ObjEnum *matrix);
-        std::pair<int,int> get_matrix_pos();
-        std::pair<float,float> get_screen_pos();
-        bool isValid();
-        void set_valid(bool b);
         bool is_moving();
-        void set_moving(bool b);
-
-
-    protected:
+        bool subindoEscada = false;
         bool moving = false;
         bool valid = true;
         std::pair<float,float> targetPosition;
-        std::pair<float,float> screenPosition;
-        std::pair<int,int> matrixPosition;
+        Point3D posicao;
+
+    protected:
+
     private:
 };
 
