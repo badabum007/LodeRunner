@@ -9,7 +9,8 @@ enum class ObjEnum
     BLOCODEST,
     BLOCOINDEST,
     OURO,
-    ESCADA
+    ESCADASOBE,
+    ESCADADESCE
 };
 
 #endif // OBJENUM_H_INCLUDED

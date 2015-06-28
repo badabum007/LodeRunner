@@ -204,7 +204,7 @@ float backgrundColor[4] = {0.0f,0.0f,0.0f,1.0f};
 Point3D posicaoJogador;
 int andarNivel = 1;
 Camera primeiraPessoaCam, terceiraPessoaCam, cimaCam;
-C3DObject blocoIndest, blocoDest, ouro, personagem, escada;
+C3DObject blocoIndest, blocoDest, ouro, personagem, escadaSobe, escadaDesce;
 
 list<Personagem*> inimigos;
 list<Bloco*> blocos;
@@ -306,8 +306,8 @@ void initBlocos()
                         b->tipo = ObjEnum::BLOCOINDEST;
                     else if(value == ObjEnum::OURO)
                         b->tipo = ObjEnum::OURO;
-                    else if(value == ObjEnum::ESCADA)
-                        b->tipo = ObjEnum::ESCADA;
+                    else if(value == ObjEnum::ESCADASOBE)
+                        b->tipo = ObjEnum::ESCADASOBE;
 
                     blocosMap.insert(std::make_pair(std::make_tuple(i,j,-2 + 2*k+ DISTANCIA_ANDARES*a),b));
 
@@ -319,9 +319,10 @@ void initBlocos()
 
 std::pair<int,int> separaAltura(int y)
 {
-    int k = ((y+2) % DISTANCIA_ANDARES) /2;
-    int a = ((y + 2) + 2*k) / DISTANCIA_ANDARES;
-    return std::make_pair(k,a);
+    int aux = (int)y;
+    int k = ((aux+2) % DISTANCIA_ANDARES) /2;
+    int a = ((aux + 2) + 2*k) / DISTANCIA_ANDARES;
+    return std::make_pair(k,a/FATOR_TAMANHO_MAPA);
 }
 
 void renderMapa()
@@ -380,11 +381,11 @@ void renderMapa()
             ouro.Draw(SMOOTH_MATERIAL_TEXTURE);
            // matrizMapa[i][j][k + a] = ObjEnum::OURO;
         }
-        if(bl->tipo == ObjEnum::ESCADA)
+        if(bl->tipo == ObjEnum::ESCADASOBE)
         {
-           // b->tipo = ObjEnum::ESCADA;
-            escada.Draw(SMOOTH_MATERIAL_TEXTURE);
-           // matrizMapa[i][j][k + a] = ObjEnum::ESCADA;
+           // b->tipo = ObjEnum::ESCADASOBE;
+            escadaSobe.Draw(SMOOTH_MATERIAL_TEXTURE);
+           // matrizMapa[i][j][k + a] = ObjEnum::ESCADASOBE;
         }
         if(bl->tipo == ObjEnum::VAZIO)
         {
@@ -459,10 +460,12 @@ void initModel() {
 	blocoDest.Load("../../models/destrutivel.obj");
 	ouro.Init();
 	ouro.Load("../../models/ouro.obj");
-	escada.Init();
+	escadaSobe.Init();
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	escada.Load("../../models/escada.obj");
-
+	escadaSobe.Load("../../models/escadaSobe.obj");
+    escadaDesce.Init();
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	escadaDesce.Load("../../models/escadaDesce.obj");
 
 
 	printf("Models ok. \n \n \n");
@@ -618,7 +621,7 @@ int getDirection()
     return direction;
 }
 
-bool hacolisao (float floatX, float floatZ, int Y)
+bool hacolisao (float floatX, float floatZ, float Y)
 {
 
     int direction = getDirection();
@@ -633,38 +636,37 @@ bool hacolisao (float floatX, float floatZ, int Y)
 
 
     bool helper = false;
-    Y = andarNivel;
     std::pair<int,int> par = separaAltura(Y);
    int k = par.first, a = par.second;
-    //std::cout << "X: " << X << "   Zaux: " << Zaux << "  Z: " << Z << std::endl;
-   // std::cout << "DIRECAO: " << direction << std::endl;
+    std::cout << "k: " << k << "   Y: " << me->posicao.y << "  a: " << a << std::endl;
+    std::cout << "DIRECAO: " << direction << std::endl;
  //   return false;
+
     switch (direction)
     {
     case 0:
-        if(mapa->andares[a].andares[k].grid[Z-1][X] == ObjEnum::ESCADA || mapa->andares[a].andares[k].grid[Z-1][X+1] == ObjEnum::ESCADA)
+        if(mapa->andares[a].andares[k].grid[Z-1][X] == ObjEnum::ESCADASOBE || mapa->andares[a].andares[k].grid[Z-1][X+1] == ObjEnum::ESCADASOBE)
         {
             me->subindoEscada = true;
             return true;
         }
         break;
     case 2:
-        if(mapa->andares[a].andares[k].grid[Z][X+1] == ObjEnum::ESCADA || mapa->andares[a].andares[k].grid[Z+1][X+1] == ObjEnum::ESCADA)
+        if(mapa->andares[a].andares[k].grid[Z][X+1] == ObjEnum::ESCADASOBE || mapa->andares[a].andares[k].grid[Z+1][X+1] == ObjEnum::ESCADASOBE)
         {
             me->subindoEscada = true;
             return true;
         }
-        return mapa->andares[a].andares[k].grid[Z][X+1] != ObjEnum::VAZIO || mapa->andares[a].andares[k].grid[Z+1][X+1] != ObjEnum::VAZIO;
         break;
     case 4:
-        if( mapa->andares[a].andares[k].grid[Z+1][X] == ObjEnum::ESCADA)
+        if( mapa->andares[a].andares[k].grid[Z+1][X] == ObjEnum::ESCADASOBE)
         {
             me->subindoEscada = true;
             return true;
         }
         break;
     case 6:
-        if( mapa->andares[a].andares[k].grid[Z][X-1] == ObjEnum::ESCADA || mapa->andares[a].andares[k].grid[Z+1][X-1] == ObjEnum::ESCADA)
+        if( mapa->andares[a].andares[k].grid[Z][X-1] == ObjEnum::ESCADASOBE || mapa->andares[a].andares[k].grid[Z+1][X-1] == ObjEnum::ESCADASOBE)
         {
             me->subindoEscada = true;
             return true;
@@ -677,22 +679,64 @@ bool hacolisao (float floatX, float floatZ, int Y)
     switch (direction)
     {
     case 0:
-        return mapa->andares[a].andares[k].grid[Z-1][X] != ObjEnum::VAZIO || mapa->andares[a].andares[k].grid[Z-1][X+1] != ObjEnum::VAZIO;
+        if(mapa->andares[a].andares[k].grid[Z-1][X] == ObjEnum::ESCADADESCE || mapa->andares[a].andares[k].grid[Z-1][X+1] == ObjEnum::ESCADADESCE)
+        {
+            me->descendoEscada = true;
+            return true;
+        }
         break;
     case 2:
-        return mapa->andares[a].andares[k].grid[Z][X+1] != ObjEnum::VAZIO || mapa->andares[a].andares[k].grid[Z+1][X+1] != ObjEnum::VAZIO;
+        if(mapa->andares[a].andares[k].grid[Z][X+1] == ObjEnum::ESCADADESCE || mapa->andares[a].andares[k].grid[Z+1][X+1] == ObjEnum::ESCADADESCE)
+        {
+            me->descendoEscada = true;
+            return true;
+        }
         break;
     case 4:
-        return mapa->andares[a].andares[k].grid[Z+1][X] != ObjEnum::VAZIO;// || Zaux % (FATOR_TAMANHO_MAPA*2) == 0;
+        if( mapa->andares[a].andares[k].grid[Z+1][X] == ObjEnum::ESCADADESCE)
+        {
+            me->descendoEscada = true;
+            return true;
+        }
         break;
     case 6:
+        if( mapa->andares[a].andares[k].grid[Z][X-1] == ObjEnum::ESCADADESCE || mapa->andares[a].andares[k].grid[Z+1][X-1] == ObjEnum::ESCADADESCE)
+        {
+            me->descendoEscada = true;
+            return true;
+        }
+        break;
+    default:
+        break;
+    }
+
+    switch (direction)
+    {
+    case 0:
+
+        return mapa->andares[a].andares[k].grid[Z-1][X] != ObjEnum::VAZIO || mapa->andares[a].andares[k].grid[Z-1][X+1] != ObjEnum::VAZIO;
+
+        break;
+    case 2:
+
+        return mapa->andares[a].andares[k].grid[Z][X+1] != ObjEnum::VAZIO || mapa->andares[a].andares[k].grid[Z+1][X+1] != ObjEnum::VAZIO;
+
+        break;
+    case 4:
+
+        return mapa->andares[a].andares[k].grid[Z+1][X] != ObjEnum::VAZIO;// || Zaux % (FATOR_TAMANHO_MAPA*2) == 0;
+
+        break;
+    case 6:
+
         return  mapa->andares[a].andares[k].grid[Z][X-1] != ObjEnum::VAZIO || mapa->andares[a].andares[k].grid[Z+1][X-1] != ObjEnum::VAZIO;
+
         break;
     }
     return false;
 }
 
-void sobeEscada()
+void sobeESCADASOBE()
 {
 
 }
@@ -796,10 +840,28 @@ void updateState()
 {
     if(me->subindoEscada)
     {
-        me->posicao.z += 0.1;
+        me->posicao.y += 0.4;
+        if(me->posicao.y >= (-2 + 2+ DISTANCIA_ANDARES*(me->andarAtual+1)) * FATOR_TAMANHO_MAPA)
+        {
+            me->subindoEscada = false;
+            me->andarAtual++;
+        }
+
         return;
     }
-   // std::cout << "Speed: " << speedX << "  POSX: " << posX << std::endl;
+    if(me->descendoEscada)
+    {
+        me->posicao.y -= 0.4;
+        if(me->posicao.y >= (-2 + 2+ DISTANCIA_ANDARES*(me->andarAtual+1)) * FATOR_TAMANHO_MAPA)
+        {
+            me->descendoEscada = false;
+            me->andarAtual--;
+        }
+
+        return;
+    }
+
+
 	if ((upPressed || downPressed))
     {
 
@@ -884,7 +946,7 @@ void updateState()
         if(direction == 6)
             b = blocosMap[std::make_tuple(Z,X-3,-2 + 2*(k-1) + DISTANCIA_ANDARES*a)];
 
-        if(b != NULL && b->tipo == ObjEnum::ESCADA)
+        if(b != NULL && b->tipo == ObjEnum::ESCADASOBE)
         {
 
             rpressed = false;

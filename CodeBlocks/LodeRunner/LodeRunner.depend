@@ -536,7 +536,7 @@
 1398812012 source:c:\users\usuario\desktop\fcg\lab4\pratica4_source_files\src\texture.cpp
 	"Texture.h"
 
-1435520350 source:c:\users\usuario\desktop\fcg\loderunner\src\3dobject.cpp
+1435523059 source:c:\users\usuario\desktop\fcg\loderunner\src\3dobject.cpp
 	"../include/3DObject.h"
 	<malloc.h>
 
@@ -544,23 +544,23 @@
 	<string.h>
 	"glm.h"
 
-1435092758 c:\users\usuario\desktop\fcg\loderunner\src\glm.h
+1398812018 c:\users\usuario\desktop\fcg\loderunner\src\glm.h
 	<GLUT/glut.h>
 	<GL/gl.h>
 	<GL/glut.h>
 
-1435092758 c:\users\usuario\desktop\fcg\loderunner\codeblocks\include\gl\gl.h
+1435523058 c:\users\usuario\desktop\fcg\loderunner\codeblocks\include\gl\gl.h
 
-1435092758 c:\users\usuario\desktop\fcg\loderunner\codeblocks\include\gl\glut.h
+1435523058 c:\users\usuario\desktop\fcg\loderunner\codeblocks\include\gl\glut.h
 	<windows.h>
 	<GL/gl.h>
 	<GL/glu.h>
 
-1435092758 c:\users\usuario\desktop\fcg\loderunner\codeblocks\include\gl\glu.h
+1435523058 c:\users\usuario\desktop\fcg\loderunner\codeblocks\include\gl\glu.h
 	<stddef.h>
 	<GL/gl.h>
 
-1435520358 source:c:\users\usuario\desktop\fcg\loderunner\src\bitmap.c
+1435523059 source:c:\users\usuario\desktop\fcg\loderunner\src\bitmap.c
 	"../include/bitmap.h"
 	<stdio.h>
 	<stdlib.h>
@@ -571,21 +571,21 @@
 	<windows.h>
 	<wingdi.h>
 
-1435520686 source:c:\users\usuario\desktop\fcg\loderunner\src\glm.cpp
+1398812020 source:c:\users\usuario\desktop\fcg\loderunner\src\glm.cpp
 	<math.h>
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	<assert.h>
-	"../include/glm.h"
+	"glm.h"
 
-1435521750 source:c:\users\usuario\desktop\fcg\loderunner\src\glmimg.cpp
+1399353128 source:c:\users\usuario\desktop\fcg\loderunner\src\glmimg.cpp
 	<string.h>
 	<math.h>
-	"../include/Texture.h"
-	<GL/gl.h>
+	"Texture.h"
 	<windows.h>
-	"../include/glm.h"
+	<GL/gl.h>
+	"glm.h"
 
 1435092758 c:\users\usuario\desktop\fcg\loderunner\src\texture.h
 	<windows.h>
@@ -595,7 +595,7 @@
 	<GL/glut.h>
 	<math.h>
 
-1435520529 source:c:\users\usuario\desktop\fcg\loderunner\src\main.cpp
+1435526643 source:c:\users\usuario\desktop\fcg\loderunner\src\main.cpp
 	<windows.h>
 	<stdio.h>
 	<stdlib.h>
@@ -620,7 +620,7 @@
 	"../include/Point3D.h"
 	"../include/Camera.h"
 
-1435092758 c:\users\usuario\desktop\fcg\loderunner\codeblocks\include\al\alut.h
+1435523058 c:\users\usuario\desktop\fcg\loderunner\codeblocks\include\al\alut.h
 	<al/alc.h>
 	<al/al.h>
 	<OpenAL/alc.h>
@@ -628,21 +628,21 @@
 	"al.h"
 	"alc.h"
 
-1435092758 c:\users\usuario\desktop\fcg\loderunner\codeblocks\include\al\alc.h
+1435523058 c:\users\usuario\desktop\fcg\loderunner\codeblocks\include\al\alc.h
 
-1435092758 c:\users\usuario\desktop\fcg\loderunner\codeblocks\include\al\al.h
+1435523058 c:\users\usuario\desktop\fcg\loderunner\codeblocks\include\al\al.h
 
-1435520720 source:c:\users\usuario\desktop\fcg\loderunner\src\texture.cpp
+1435523059 source:c:\users\usuario\desktop\fcg\loderunner\src\texture.cpp
 	"../include/Texture.h"
 
-1435208152 source:c:\users\usuario\desktop\fcg\loderunner\src\color.cpp
+1435523059 source:c:\users\usuario\desktop\fcg\loderunner\src\color.cpp
 	"../include/Color.h"
 	<stdint.h>
 
 1435092758 c:\users\usuario\desktop\fcg\loderunner\src\color.h
 	<stdint.h>
 
-1435238161 source:c:\users\usuario\desktop\fcg\loderunner\src\gridbitmap.cpp
+1435523059 source:c:\users\usuario\desktop\fcg\loderunner\src\gridbitmap.cpp
 	"../include/GridBitmap.h"
 	"../include/ObjEnum.h"
 	<stdio.h>
@@ -652,13 +652,13 @@
 	"Color.h"
 	"vector"
 
-1435219826 source:c:\users\usuario\desktop\fcg\loderunner\src\andar.cpp
+1435523059 source:c:\users\usuario\desktop\fcg\loderunner\src\andar.cpp
 	"../include/Andar.h"
 
 1435092758 c:\users\usuario\desktop\fcg\loderunner\src\andar.h
 	"GridBitmap.h"
 
-1435293467 source:c:\users\usuario\desktop\fcg\loderunner\src\filemapreader.cpp
+1435525763 source:c:\users\usuario\desktop\fcg\loderunner\src\filemapreader.cpp
 	"../include/FileMapReader.h"
 	"../include/bitmap.h"
 	<stdlib.h>
@@ -674,47 +674,46 @@
 	<stdlib.h>
 	"GridBitmap.h"
 
-1435210488 source:c:\users\usuario\desktop\fcg\loderunner\src\mapa.cpp
+1435523059 source:c:\users\usuario\desktop\fcg\loderunner\src\mapa.cpp
 	"../include/Mapa.h"
 	"../include/ObjEnum.h"
 
-1435229049 c:\users\usuario\desktop\fcg\loderunner\include\mapa.h
+1435523058 c:\users\usuario\desktop\fcg\loderunner\include\mapa.h
 	"vector"
 	"Andar.h"
 	"ObjEnum.h"
 
-1435219585 c:\users\usuario\desktop\fcg\loderunner\include\andar.h
+1435523058 c:\users\usuario\desktop\fcg\loderunner\include\andar.h
 	"GridBitmap.h"
 
-1435237896 c:\users\usuario\desktop\fcg\loderunner\include\gridbitmap.h
+1435523058 c:\users\usuario\desktop\fcg\loderunner\include\gridbitmap.h
 	"Color.h"
 	<vector>
 	"ObjEnum.h"
 
-1435210330 c:\users\usuario\desktop\fcg\loderunner\include\color.h
+1435525713 c:\users\usuario\desktop\fcg\loderunner\include\color.h
 	<stdint.h>
 
-1435212778 c:\users\usuario\desktop\fcg\loderunner\include\filemapreader.h
+1435523058 c:\users\usuario\desktop\fcg\loderunner\include\filemapreader.h
 	<string.h>
 	<string>
 	<stdlib.h>
 	"GridBitmap.h"
 	"Mapa.h"
 
-1435092758 c:\users\usuario\desktop\fcg\loderunner\include\bitmap.h
+1435523059 c:\users\usuario\desktop\fcg\loderunner\include\bitmap.h
 	<GL/glut.h>
 	<windows.h>
 	<wingdi.h>
 
-1435092758 c:\users\usuario\desktop\fcg\loderunner\include\3dobject.h
+1435523058 c:\users\usuario\desktop\fcg\loderunner\include\3dobject.h
 	<string.h>
 	"glm.h"
 
-1435520658 c:\users\usuario\desktop\fcg\loderunner\include\glm.h
+1435523059 c:\users\usuario\desktop\fcg\loderunner\include\glm.h
 	<GLUT/glut.h>
-	<windows.h>
-	<gl/gl.h>
-	<gl/glut.h>
+	<GL/gl.h>
+	<GL/glut.h>
 
 1435115795 source:c:\users\usuario\desktop\fcg\loderunner\src\andarbitmap.cpp
 	"../include/AndarBitmap.h"
@@ -731,26 +730,26 @@
 	"../include/MapaBitmap.h"
 	"../include/ObjEnum.h"
 
-1435313320 source:c:\users\usuario\desktop\fcg\loderunner\src\bloco.cpp
+1435523059 source:c:\users\usuario\desktop\fcg\loderunner\src\bloco.cpp
 	"../include/Bloco.h"
 	"../include/ObjEnum.h"
 	<ctime>
 	<iostream>
 
-1435313352 c:\users\usuario\desktop\fcg\loderunner\include\bloco.h
+1435523058 c:\users\usuario\desktop\fcg\loderunner\include\bloco.h
 	<iostream>
 	<vector>
 	<tuple>
 	<ctime>
 	"ObjEnum.h"
 
-1435458222 c:\users\usuario\desktop\fcg\loderunner\include\objenum.h
+1435525581 c:\users\usuario\desktop\fcg\loderunner\include\objenum.h
 
-1435459342 source:c:\users\usuario\desktop\fcg\loderunner\src\personagem.cpp
+1435523059 source:c:\users\usuario\desktop\fcg\loderunner\src\personagem.cpp
 	"../include/Personagem.h"
 	"../include/ObjEnum.h"
 
-1435458632 c:\users\usuario\desktop\fcg\loderunner\include\personagem.h
+1435525426 c:\users\usuario\desktop\fcg\loderunner\include\personagem.h
 	<iostream>
 	<vector>
 	"../include/ObjEnum.h"
@@ -759,26 +758,26 @@
 	<chrono>
 	<algorithm>
 
-1435120238 source:c:\users\usuario\desktop\fcg\loderunner\src\objeto.cpp
+1435523059 source:c:\users\usuario\desktop\fcg\loderunner\src\objeto.cpp
 	"../include/Objeto.h"
 
-1435120258 c:\users\usuario\desktop\fcg\loderunner\include\objeto.h
+1435523058 c:\users\usuario\desktop\fcg\loderunner\include\objeto.h
 	<iostream>
 	<vector>
 
-1435235314 source:c:\users\usuario\desktop\fcg\loderunner\src\camera.cpp
+1435523059 source:c:\users\usuario\desktop\fcg\loderunner\src\camera.cpp
 	"../include/Camera.h"
 
-1435234946 c:\users\usuario\desktop\fcg\loderunner\include\camera.h
+1435523058 c:\users\usuario\desktop\fcg\loderunner\include\camera.h
 	<gl/glu.h>
 	<gl/glut.h>
 	"../include/Point3D.h"
 
-1435235638 c:\users\usuario\desktop\fcg\loderunner\include\point3d.h
+1435523058 c:\users\usuario\desktop\fcg\loderunner\include\point3d.h
 	<gl/gl.h>
 	<cstdio>
 
-1435235191 source:c:\users\usuario\desktop\fcg\loderunner\src\point3d.cpp
+1435523059 source:c:\users\usuario\desktop\fcg\loderunner\src\point3d.cpp
 	"../include/Point3D.h"
 	<cmath>
 
@@ -796,7 +795,7 @@
 	<iostream>
 	<gl/glut.h>
 
-1435092758 c:\users\usuario\desktop\fcg\loderunner\include\texture.h
+1435523059 c:\users\usuario\desktop\fcg\loderunner\include\texture.h
 	<windows.h>
 	<windowsx.h>
 	<stdlib.h>

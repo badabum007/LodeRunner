@@ -21,6 +21,8 @@ class Personagem
         void keep_moving(ObjEnum *matrix);
         bool is_moving();
         bool subindoEscada = false;
+        int andarAtual = 0;
+        bool descendoEscada = false;
         bool moving = false;
         bool valid = true;
         std::pair<float,float> targetPosition;

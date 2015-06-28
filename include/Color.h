@@ -36,7 +36,9 @@ static Color* BLOCODEST_COLOR = new Color(128,128,128); //cinza
 
 static Color* OURO_COLOR = new Color(255,255,0); //amarelo
 
-static Color* ESCADA_COLOR = new Color(0,255,0); //verde
+static Color* ESCADASOBE_COLOR = new Color(0,255,0); //verde
+
+static Color* ESCADADESCE_COLOR = new Color(0,128,0); //verde
 
 static Color* VAZIO_COLOR = new Color(255,255,255); //branco
 

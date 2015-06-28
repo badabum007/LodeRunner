@@ -74,8 +74,10 @@ GridBitmap* ReadBMP(std::string filename)
                 grid->grid[i][aux] = ObjEnum::BLOCODEST;
             else if(cor == OURO_COLOR)
                 grid->grid[i][aux] = ObjEnum::OURO;
-            else if(cor == ESCADA_COLOR)
-                grid->grid[i][aux] = ObjEnum::ESCADA;
+            else if(cor == ESCADASOBE_COLOR)
+                grid->grid[i][aux] = ObjEnum::ESCADASOBE;
+            else if(cor == ESCADADESCE_COLOR)
+                grid->grid[i][aux] = ObjEnum::ESCADADESCE;
             else if(cor == VAZIO_COLOR)
                 grid->grid[i][aux] = ObjEnum::VAZIO;
             else
