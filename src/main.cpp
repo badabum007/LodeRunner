@@ -927,6 +927,36 @@ void renderFloor() {
 	glPopMatrix();
 }
 
+void writeTextAt(int x, int y, std::string text)
+{
+    double matrix[16]; // Save the matrices
+    double mvmatrix[16];
+    glMatrixMode(GL_PROJECTION); // change the current matrix to PROJECTION
+    glGetDoublev(GL_PROJECTION_MATRIX, matrix); // get the values from PROJECTION matrix to local variable
+    glLoadIdentity(); // reset PROJECTION matrix to identity matrix
+    glOrtho(0, windowWidth, 0, windowHeight, 0.0, 5.0); // orthographic perspective
+    glMatrixMode(GL_MODELVIEW); // change current matrix to MODELVIEW matrix again
+    glGetDoublev(GL_MODELVIEW_MATRIX, mvmatrix);
+    glLoadIdentity(); // reset it to identity matrix
+    glPushMatrix(); // push current state of MODELVIEW matrix to stack
+    glLoadIdentity(); // reset it again. (may not be required, but it my convention)
+    glRasterPos2i(x, y); // raster position in 2D
+    for(int i=0; i<text.size(); i++){
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, (int)text.at(i)); // generation of characters in our text with 9 by 15 GLU font
+    }
+    glPopMatrix(); // get MODELVIEW matrix value from stack
+    glMatrixMode(GL_PROJECTION); // change current matrix mode to PROJECTION
+    glLoadMatrixd(matrix); // reset
+    glMatrixMode(GL_MODELVIEW); // change current matrix mode to MODELVIEW
+    glLoadMatrixd(mvmatrix);
+}
+
+void fimJogo()
+{
+    std::string printMe ("GAME OVER");
+    writeTextAt(10,10,printMe);//nao funciona essa bagaça
+}
+
 void moveInimigos()
 {
     for(Personagem* p : inimigos)
@@ -936,7 +966,8 @@ void moveInimigos()
     }
 }
 
-void renderScene() {
+void renderScene()
+{
 	glClearColor(backgrundColor[0],backgrundColor[1],backgrundColor[2],backgrundColor[3]);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // limpar o depth buffer
 
@@ -958,6 +989,7 @@ void renderScene() {
     renderMapa();
     glTranslatef(me->posicao.x, 1+me->posicao.y, me->posicao.z);
     glScaled(6,6,6);
+    glRotated(90+roty,0,1,0);
 
     personagem.Draw(SMOOTH_MATERIAL_TEXTURE);
 
@@ -1404,6 +1436,7 @@ void mainIdle() {
 
 int main(int argc, char **argv)
 {
+    fimJogo();
     srand(time(0));
     Point3D ponto;
     ponto.x = 0; ponto.y = 0; ponto.z = 1;

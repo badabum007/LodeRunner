@@ -809,7 +809,7 @@
 1435697015 c:\users\usuario\desktop\fcg\loderunner\include\iacontroller.h
 	"../include/Personagem.h"
 
-1435700994 source:c:\users\usuario\desktop\fcg\loderunner\src\iacontroller.cpp
+1435702446 source:c:\users\usuario\desktop\fcg\loderunner\src\iacontroller.cpp
 	"../include/IAController.h"
 	"../include/Personagem.h"
 	<random>

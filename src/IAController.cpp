@@ -59,7 +59,7 @@ void moveInimigo(Personagem* principal, Personagem* inimigo)
     {
 
         if(isValid(inimigo->posicao.x + (FATOR_TAMANHO_MAPA*5*inimigo->speedX/10000), inimigo->posicao.z + (FATOR_TAMANHO_MAPA*5*inimigo->speedZ/10000)))
-            inimigo->caminha(inimigo->speedX/10000 , inimigo->speedZ/10000);
+            inimigo->caminha(inimigo->speedX/15000 , inimigo->speedZ/15000);
         inimigo->iteracoes += 1;
     }
 }
