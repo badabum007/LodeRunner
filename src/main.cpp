@@ -26,6 +26,7 @@ seja uma spotlight;
 #include <stdlib.h>
 //#include <math.h>
 #include <cmath>
+#include <random>
 #include <ctime>
 #include <cstring>
 #include <iostream>
@@ -72,7 +73,7 @@ seja uma spotlight;
 #define NUM_INIMIGOS 5
 #define MAX_FLOORS 20
 #define DISTANCIA_ANDARES 12
-
+#include "../include/IAController.h"
 
 
 
@@ -205,12 +206,13 @@ Point3D posicaoJogador;
 int andarNivel = 1;
 TipoCamera atualCam = TipoCamera::PRIMEIRA_PESSOA;
 Camera primeiraPessoaCam, terceiraPessoaCam, cimaCam;
-C3DObject blocoIndest, blocoDest, ouro, personagem, escadaSobe, escadaDesce;
+C3DObject blocoIndest, blocoDest, ouro, personagem, escadaSobe, escadaDesce,inimigoO;
 
 int ourosColetados=0, totalOuros=0;
 list<Personagem*> inimigos;
 list<Bloco*> blocos;
 map<std::tuple<int,int,int>, Bloco*> blocosMap;
+map<std::tuple<int,int,int>, Personagem*> inimigosMap;
 
 
 Mapa* mapa;
@@ -301,6 +303,32 @@ void initLight() {
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position1);
 
+
+}
+
+void initInimigos()
+{
+    ObjEnum value = ObjEnum::INIMIGO;
+    for(int a=0;a < mapa->andares.size();a++)
+    {
+        for(int h=0;h<2 + (rand() % (int)(4));h++)
+        {
+            int i = 0 + (rand() % (int)(15));
+            int j = 0 + (rand() % (int)(15));
+            Point3D ponto;
+            ponto.x = i;
+            ponto.y = DISTANCIA_ANDARES*a;
+            ponto.z = j;
+            Personagem* b = new Personagem(ponto);
+            inimigos.push_back(b);
+            std::cout << rand();
+
+
+            inimigosMap.insert(std::make_pair(std::make_tuple(i,j,-2 + 2+ DISTANCIA_ANDARES*a),b));
+        }
+
+
+    }
 }
 
 void initBlocos()
@@ -353,7 +381,10 @@ void initBlocos()
                 }
             }
         }
+
     }
+
+    initInimigos();
 }
 
 std::pair<int,int> separaAltura(int y)
@@ -446,6 +477,18 @@ void renderMapa()
         glPopMatrix();
     }
 
+    for(Personagem* p : inimigos)
+    {
+        glPushMatrix();
+        glScalef(FATOR_TAMANHO_MAPA,FATOR_TAMANHO_MAPA,FATOR_TAMANHO_MAPA);
+        glTranslatef(0.0 + 2*p->posicao.x,p->posicao.y,0.0 + 2*p->posicao.z);
+
+        inimigoO.Draw(SMOOTH_MATERIAL_TEXTURE);
+
+        glPopMatrix();
+
+    }
+
 
 
 }
@@ -515,7 +558,8 @@ void initModel() {
 	escadaDesce.Load("../../models/escadaDesce.obj");
     personagem.Init();
     personagem.Load("../../models/Steve.obj");
-
+    inimigoO.Init();
+    inimigoO.Load("../../models/Steve.obj");
 	printf("Models ok. \n \n \n");
 }
 
@@ -883,6 +927,15 @@ void renderFloor() {
 	glPopMatrix();
 }
 
+void moveInimigos()
+{
+    for(Personagem* p : inimigos)
+    {
+        moveInimigo(me,p);
+        inimigoO.Draw(SMOOTH_MATERIAL_TEXTURE);
+    }
+}
+
 void renderScene() {
 	glClearColor(backgrundColor[0],backgrundColor[1],backgrundColor[2],backgrundColor[3]);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // limpar o depth buffer
@@ -905,7 +958,10 @@ void renderScene() {
     renderMapa();
     glTranslatef(me->posicao.x, 1+me->posicao.y, me->posicao.z);
     glScaled(6,6,6);
+
     personagem.Draw(SMOOTH_MATERIAL_TEXTURE);
+
+    moveInimigos();
 	//renderFloor();
 
 	//modelAL.Translate(0.0f,1.0f,0.0f);
@@ -1348,6 +1404,7 @@ void mainIdle() {
 
 int main(int argc, char **argv)
 {
+    srand(time(0));
     Point3D ponto;
     ponto.x = 0; ponto.y = 0; ponto.z = 1;
     me = new Personagem(ponto);

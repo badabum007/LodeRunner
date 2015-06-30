@@ -26,6 +26,10 @@ class Personagem
         bool moving = false;
         bool valid = true;
         bool caindo = false;
+        float speedX = 0.0f;
+        float speedZ = 0.0f;
+        int iteracoes=5000000;
+
         std::pair<float,float> targetPosition;
         Point3D posicao;
 
