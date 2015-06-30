@@ -595,7 +595,7 @@
 	<GL/glut.h>
 	<math.h>
 
-1435651025 source:c:\users\usuario\desktop\fcg\loderunner\src\main.cpp
+1435691008 source:c:\users\usuario\desktop\fcg\loderunner\src\main.cpp
 	<windows.h>
 	<stdio.h>
 	<stdlib.h>
@@ -765,8 +765,9 @@
 	<iostream>
 	<vector>
 
-1435523059 source:c:\users\usuario\desktop\fcg\loderunner\src\camera.cpp
+1435676991 source:c:\users\usuario\desktop\fcg\loderunner\src\camera.cpp
 	"../include/Camera.h"
+	<iostream>
 
 1435523058 c:\users\usuario\desktop\fcg\loderunner\include\camera.h
 	<gl/glu.h>

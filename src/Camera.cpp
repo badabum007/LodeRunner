@@ -1,4 +1,5 @@
 #include "../include/Camera.h"
+#include <iostream>
 
 Camera::Camera()
     : eye(0.0,0.0,0.0), center(0.0,0.0,0.0), up(0.0,1.0,0.0)

@@ -239,17 +239,39 @@ Atualiza a posição e orientação da camera
 void updateCam() {
 
 
-    primeiraPessoaCam.set_eye(me->posicao + 5 * Point3D(sin(roty*PI/180), -cos(rotx*PI/180), cos(roty*PI/180)));
-    primeiraPessoaCam.set_center(me->posicao);
+    primeiraPessoaCam.set_eye(me->posicao.x,(GLfloat)( me->posicao.y + posYOffset + 0.025 * std::abs(sin(headPosAux*PI/180))), me->posicao.z);
+    primeiraPessoaCam.set_center(me->posicao.x + sin(roty*PI/180),me->posicao.y + posYOffset + 0.025 * std::abs(sin(headPosAux*PI/180)) + cos(rotx*PI/180),me->posicao.z -cos(roty*PI/180));
     primeiraPessoaCam.set_upvector(0.0, 1.0, 0.0);
 	// pengoCamera.callGluLookAt();
 
-    cimaCam.set_eye(me->posicao+ Point3D(0.0, 1.0, 0.0));
-    cimaCam.set_center((me->posicao + Point3D(0.0,1.0,0.0)) - 5 * Point3D(sin(roty*PI/180), -cos(rotx*PI/180), cos(roty*PI/180)));
 
-	gluLookAt(me->posicao.x,me->posicao.y + posYOffset + 0.025 * std::abs(sin(headPosAux*PI/180)),me->posicao.z,
+  /*  terceiraPessoaCam.set_eye(me->posicao + 5 * Point3D(sin(roty*PI/180), -cos(rotx*PI/180), cos(roty*PI/180)));
+    terceiraPessoaCam.set_center(me->posicao);
+    terceiraPessoaCam.set_upvector(0.0, 1.0, 0.0);*/
+
+
+    terceiraPessoaCam.set_eye(me->posicao.x-25,(GLfloat)( me->posicao.y + posYOffset + 0.025 * std::abs(sin(headPosAux*PI/180)))+5, me->posicao.z);
+    terceiraPessoaCam.set_center(me->posicao.x + sin(roty*PI/180),me->posicao.y + posYOffset + 0.025 * std::abs(sin(headPosAux*PI/180)) + cos(rotx*PI/180),me->posicao.z -cos(roty*PI/180));
+    terceiraPessoaCam.set_upvector(0.0, 1.0, 0.0);
+
+
+	/*gluLookAt(me->posicao.x,me->posicao.y + posYOffset + 0.025 * std::abs(sin(headPosAux*PI/180)),me->posicao.z,
 		me->posicao.x + sin(roty*PI/180),me->posicao.y + posYOffset + 0.025 * std::abs(sin(headPosAux*PI/180)) + cos(rotx*PI/180),me->posicao.z -cos(roty*PI/180),
-		0.0,1.0,0.0);
+		0.0,1.0,0.0);*/
+    switch (atualCam)
+	{
+        case TipoCamera::PRIMEIRA_PESSOA:
+            primeiraPessoaCam.callGluLookAt();
+            break;
+        case TipoCamera::TERCEIRA_PESSOA:
+            terceiraPessoaCam.callGluLookAt();
+            break;
+        case TipoCamera::CIMA:
+            cimaCam.callGluLookAt();
+            glDisable(GL_FOG);
+            break;
+	}
+
 
 	// atualiza a posição do listener e da origen do som, são as mesmas da camera, já que os passos vem de onde o personagem está
 	listenerPos[0] = me->posicao.x;
@@ -491,7 +513,8 @@ void initModel() {
     escadaDesce.Init();
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	escadaDesce.Load("../../models/escadaDesce.obj");
-
+    personagem.Init();
+    personagem.Load("../../models/Steve.obj");
 
 	printf("Models ok. \n \n \n");
 }
@@ -880,13 +903,16 @@ void renderScene() {
 //    renderCube(new Point3D(0,0,0));
 
     renderMapa();
+    glTranslatef(me->posicao.x, 1+me->posicao.y, me->posicao.z);
+    glScaled(6,6,6);
+    personagem.Draw(SMOOTH_MATERIAL_TEXTURE);
 	//renderFloor();
 
 	//modelAL.Translate(0.0f,1.0f,0.0f);
 	//modelAL.Draw();
 }
 
-void updateCamera()
+/*void updateCamera()
 {
 
     posicaoJogador.set_coords(posX, posY + posYOffset + 0.025 * std::abs(sin(headPosAux*PI/180)) , posZ);
@@ -907,7 +933,7 @@ void updateCamera()
 	source0Pos[0] = me->posicao.x;
 	source0Pos[1] = me->posicao.y;
 	source0Pos[2] = me->posicao.z;
-}
+}*/
 
 
 void updateState()
@@ -1114,22 +1140,16 @@ void mainRender() {
 	glLoadIdentity();
 	glClear(GL_DEPTH_BUFFER_BIT);
 	updateCam();
-	switch (atualCam)
-	{
-    case TipoCamera::PRIMEIRA_PESSOA:
-        primeiraPessoaCam.callGluLookAt();
-        break;
-    case TipoCamera::TERCEIRA_PESSOA:
-        terceiraPessoaCam.callGluLookAt();
-        break;
-    case TipoCamera::CIMA:
-        cimaCam.callGluLookAt();
-        glDisable(GL_FOG);
-        break;
-	}
+
+
+
 	renderScene();
 
-	updateCamera();
+  //  cimaCam.set_eye(me->posicao.getX(), cimaCam.get_eye().getY(), me->posicao.getZ());
+   /* cimaCam.set_center(me->posicao.getX(), -1, me->posicao.getZ());
+    cimaCam.callGluLookAt();*/
+//	updateCamera();
+   // updateCam();
 	glFlush();
 	glutPostRedisplay();
 	Sleep(30);
@@ -1213,6 +1233,7 @@ TipoCamera alteraCamera(TipoCamera curCamera)
         default:
             return TipoCamera::PRIMEIRA_PESSOA;
     }
+
 
 }
 
@@ -1335,6 +1356,11 @@ int main(int argc, char **argv)
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
 	glutInitWindowSize(windowWidth,windowHeight);
 	glutInitWindowPosition(windowXPos,windowYPos);
+
+
+    cimaCam.set_eye(0.0, 44.0, 0.0);
+    cimaCam.set_center(0.0, -1.0, 0.0);
+    cimaCam.set_upvector(1.0, 0.0, 0.0);
 
 	/**
 	Store main window id so that glui can send it redisplay events
