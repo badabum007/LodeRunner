@@ -13,4 +13,10 @@ enum class ObjEnum
     ESCADADESCE
 };
 
+enum class TipoCamera
+{
+    PRIMEIRA_PESSOA,
+    TERCEIRA_PESSOA,
+    CIMA
+};
 #endif // OBJENUM_H_INCLUDED

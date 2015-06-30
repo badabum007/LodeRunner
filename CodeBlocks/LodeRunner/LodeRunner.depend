@@ -595,7 +595,7 @@
 	<GL/glut.h>
 	<math.h>
 
-1435634886 source:c:\users\usuario\desktop\fcg\loderunner\src\main.cpp
+1435651025 source:c:\users\usuario\desktop\fcg\loderunner\src\main.cpp
 	<windows.h>
 	<stdio.h>
 	<stdlib.h>
@@ -736,14 +736,14 @@
 	<ctime>
 	<iostream>
 
-1435529306 c:\users\usuario\desktop\fcg\loderunner\include\bloco.h
+1435642255 c:\users\usuario\desktop\fcg\loderunner\include\bloco.h
 	<iostream>
 	<vector>
 	<tuple>
 	<ctime>
 	"ObjEnum.h"
 
-1435525581 c:\users\usuario\desktop\fcg\loderunner\include\objenum.h
+1435637306 c:\users\usuario\desktop\fcg\loderunner\include\objenum.h
 
 1435523059 source:c:\users\usuario\desktop\fcg\loderunner\src\personagem.cpp
 	"../include/Personagem.h"

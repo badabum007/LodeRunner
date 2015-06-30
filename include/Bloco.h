@@ -21,6 +21,7 @@ class Bloco
         std::tuple<int,int,int> getMatrixPosition();
         ObjEnum tipo;
         bool isDestroying = false;
+        bool coletado = false;
         bool destroyied = false;
         time_t tempoInicioDest;
 

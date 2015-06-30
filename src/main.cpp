@@ -203,6 +203,7 @@ float backgrundColor[4] = {0.0f,0.0f,0.0f,1.0f};
 
 Point3D posicaoJogador;
 int andarNivel = 1;
+TipoCamera atualCam = TipoCamera::PRIMEIRA_PESSOA;
 Camera primeiraPessoaCam, terceiraPessoaCam, cimaCam;
 C3DObject blocoIndest, blocoDest, ouro, personagem, escadaSobe, escadaDesce;
 
@@ -236,6 +237,15 @@ void setWindow() {
 Atualiza a posição e orientação da camera
 */
 void updateCam() {
+
+
+    primeiraPessoaCam.set_eye(me->posicao + 5 * Point3D(sin(roty*PI/180), -cos(rotx*PI/180), cos(roty*PI/180)));
+    primeiraPessoaCam.set_center(me->posicao);
+    primeiraPessoaCam.set_upvector(0.0, 1.0, 0.0);
+	// pengoCamera.callGluLookAt();
+
+    cimaCam.set_eye(me->posicao+ Point3D(0.0, 1.0, 0.0));
+    cimaCam.set_center((me->posicao + Point3D(0.0,1.0,0.0)) - 5 * Point3D(sin(roty*PI/180), -cos(rotx*PI/180), cos(roty*PI/180)));
 
 	gluLookAt(me->posicao.x,me->posicao.y + posYOffset + 0.025 * std::abs(sin(headPosAux*PI/180)),me->posicao.z,
 		me->posicao.x + sin(roty*PI/180),me->posicao.y + posYOffset + 0.025 * std::abs(sin(headPosAux*PI/180)) + cos(rotx*PI/180),me->posicao.z -cos(roty*PI/180),
@@ -382,9 +392,11 @@ void renderMapa()
 
         }
 
-        if(bl->tipo == ObjEnum::OURO)
+        if(bl->tipo == ObjEnum::OURO && bl->coletado==false)
         {
             //b->tipo = ObjEnum::OURO;
+          //  std::cout << bl->coletado;
+          //  std::cout << "AAAAAAAAAAAAAAAA";
             ouro.Draw(SMOOTH_MATERIAL_TEXTURE);
            // matrizMapa[i][j][k + a] = ObjEnum::OURO;
         }
@@ -643,6 +655,8 @@ bool hacolisao (float floatX, float floatZ, float Y)
     int Z =  Zaux  / (FATOR_TAMANHO_MAPA*2) ;
     int X = Xaux  / (FATOR_TAMANHO_MAPA*2);
 
+
+
   //  int Xaux =
  //   if (Z <= MIN_PLANSIZE || Z >= MAX_PLANSIZE || X <= MIN_PLANSIZE || X >= MAX_PLANSIZE) return true;
 
@@ -651,9 +665,11 @@ bool hacolisao (float floatX, float floatZ, float Y)
     bool helper = false;
     std::pair<int,int> par = separaAltura(Y);
    int k = par.first, a = par.second;
-    std::cout << "k: " << k << "   Y: " << me->posicao.y << "  a: " << a << std::endl;
-    //std::cout << "DIRECAO: " << direction << std::endl;
+  //  std::cout << "k: " << k << "   Y: " << me->posicao.y << "  a: " << a << std::endl;
+    std::cout << "DIRECAO: " << direction << std::endl;
  //   return false;
+
+
 
     switch (direction)
     {
@@ -723,6 +739,56 @@ bool hacolisao (float floatX, float floatZ, float Y)
         break;
     }
 
+    Bloco* b;
+    switch (direction)
+    {
+    case 0:
+        if(mapa->andares[a].andares[k].grid[Z-1][X] == ObjEnum::OURO || mapa->andares[a].andares[k].grid[Z-1][X+1] == ObjEnum::OURO)
+        {
+            b = blocosMap[std::make_tuple(Z-1,X,-2+2*k+DISTANCIA_ANDARES*a)];
+            b->tipo = ObjEnum::VAZIO;
+            b = blocosMap[std::make_tuple(Z-1,X+1,-2+2*k+DISTANCIA_ANDARES*a)];
+            b->tipo = ObjEnum::VAZIO;
+            ourosColetados++;
+            return false;
+        }
+        break;
+    case 2:
+        if(mapa->andares[a].andares[k].grid[Z][X+1] == ObjEnum::OURO || mapa->andares[a].andares[k].grid[Z+1][X+1] == ObjEnum::OURO)
+        {
+
+            b = blocosMap[std::make_tuple(Z,X+1,-2+2*k+DISTANCIA_ANDARES*a)];
+            b->tipo = ObjEnum::VAZIO;
+            b = blocosMap[std::make_tuple(Z+1,X+1,-2+2*k+DISTANCIA_ANDARES*a)];
+            b->tipo = ObjEnum::VAZIO;
+            ourosColetados++;
+            return false;
+        }
+        break;
+    case 4:
+        if(mapa->andares[a].andares[k].grid[Z+1][X] == ObjEnum::OURO)
+        {
+            b = blocosMap[std::make_tuple(Z+1,X,-2+2*k+DISTANCIA_ANDARES*a)];
+            b->tipo = ObjEnum::VAZIO;
+            ourosColetados++;
+            return false;
+        }
+        break;
+    case 6:
+        if( mapa->andares[a].andares[k].grid[Z][X-1] == ObjEnum::OURO || mapa->andares[a].andares[k].grid[Z+1][X-1] == ObjEnum::OURO)
+        {
+            b = blocosMap[std::make_tuple(Z,X-1,-2+2*k+DISTANCIA_ANDARES*a)];
+            b->tipo = ObjEnum::VAZIO;
+            b = blocosMap[std::make_tuple(Z+1,X-1,-2+2*k+DISTANCIA_ANDARES*a)];
+            b->tipo = ObjEnum::VAZIO;
+            ourosColetados++;
+            return false;
+        }
+        break;
+    default:
+        break;
+    }
+
     switch (direction)
     {
     case 0:
@@ -747,11 +813,6 @@ bool hacolisao (float floatX, float floatZ, float Y)
         break;
     }
     return false;
-}
-
-void sobeESCADASOBE()
-{
-
 }
 
 void renderFloor() {
@@ -862,6 +923,7 @@ void updateState()
 
 
 
+
     if(me->subindoEscada)
     {
         me->posicao.y += 0.4;
@@ -889,7 +951,8 @@ void updateState()
     {
         me->posicao.y -= 0.7;
     }
-    if(k==1 && (mapa->andares[a].andares[0].grid[Z][X] == ObjEnum::VAZIO))
+    Bloco* b = blocosMap[std::make_tuple(Z,X,-2+DISTANCIA_ANDARES*a)];
+    if(k==1 && ((mapa->andares[a].andares[0].grid[Z][X] == ObjEnum::VAZIO) || (mapa->andares[a].andares[k-1].grid[Z][X] == ObjEnum::BLOCODEST && b->destroyied == true)))
     {
         me->caindo = true;
         k=-1;
@@ -900,32 +963,11 @@ void updateState()
         k = 1;
         if(mapa->andares[a].andares[0].grid[Z][X] != ObjEnum::VAZIO)
         {
-            me->posicao.dy = 48*a;
+            me->posicao.y = 48*a;
            me->caindo = false;
         }
 
     }
-
-
-
-
-
-
-    /*if(me->posicao.y <= (-2 + DISTANCIA_ANDARES*(me->andarAtual-1)) * FATOR_TAMANHO_MAPA)
-    {
-        k = 0;
-        me->caindo = false;
-    }*/
-
-    /*if(mapa->andares[a].andares[k - 1].grid[Z][X] == ObjEnum::VAZIO)
-    {
-       me->caindo = true;
-    }
-    else
-    {
-        std:: cout << (int)mapa->andares[a].andares[1].grid[Z][X] == ObjEnum::VAZIO << std::endl;
-        me->caindo = false;
-    }*/
 
 
 	if ((upPressed || downPressed))
@@ -1063,7 +1105,30 @@ Render scene
 */
 void mainRender() {
 	updateState();
+	glClear(GL_COLOR_BUFFER_BIT);
+	glViewport(0,0,windowWidth, windowHeight);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPerspective(45.0, (GLfloat)windowWidth/(GLfloat)windowHeight, 0.1f, 100.0f);
+    glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glClear(GL_DEPTH_BUFFER_BIT);
+	updateCam();
+	switch (atualCam)
+	{
+    case TipoCamera::PRIMEIRA_PESSOA:
+        primeiraPessoaCam.callGluLookAt();
+        break;
+    case TipoCamera::TERCEIRA_PESSOA:
+        terceiraPessoaCam.callGluLookAt();
+        break;
+    case TipoCamera::CIMA:
+        cimaCam.callGluLookAt();
+        glDisable(GL_FOG);
+        break;
+	}
 	renderScene();
+
 	updateCamera();
 	glFlush();
 	glutPostRedisplay();
@@ -1135,6 +1200,22 @@ void onMousePassiveMove(int x, int y)
 	//glutPostRedisplay();
 }
 
+TipoCamera alteraCamera(TipoCamera curCamera)
+{
+    switch (curCamera)
+    {
+        case TipoCamera::PRIMEIRA_PESSOA:
+            return TipoCamera::TERCEIRA_PESSOA;
+        case TipoCamera::TERCEIRA_PESSOA:
+            return TipoCamera::CIMA;
+        case TipoCamera::CIMA:
+            return TipoCamera::PRIMEIRA_PESSOA;
+        default:
+            return TipoCamera::PRIMEIRA_PESSOA;
+    }
+
+}
+
 /**
 Key press event handler
 */
@@ -1172,9 +1253,6 @@ void onKeyDown(unsigned char key, int x, int y)
 		case 99: //c
 			crouched = true;
 			break;
-		/*case 114: //r
-			running = true;
-			break;*/
 		default:
 			break;
 	}
@@ -1212,9 +1290,9 @@ void onKeyUp(unsigned char key, int x, int y) {
 		case 99: //c
 			crouched = false;
 			break;
-/*		case 114: //r
-			running = false;
-			break;*/
+		case 'v': //r
+			atualCam = alteraCamera(atualCam);
+			break;
 		case 27:
 			exit(0);
 			break;
