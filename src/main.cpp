@@ -652,7 +652,7 @@ bool hacolisao (float floatX, float floatZ, float Y)
     std::pair<int,int> par = separaAltura(Y);
    int k = par.first, a = par.second;
     std::cout << "k: " << k << "   Y: " << me->posicao.y << "  a: " << a << std::endl;
-    std::cout << "DIRECAO: " << direction << std::endl;
+    //std::cout << "DIRECAO: " << direction << std::endl;
  //   return false;
 
     switch (direction)
@@ -885,21 +885,47 @@ void updateState()
         return;
     }
 
-    if(me->caindo)
+    if(me->caindo && me->posicao.y >= -10)
     {
         me->posicao.y -= 0.7;
     }
-
+    if(k==1 && (mapa->andares[a].andares[0].grid[Z][X] == ObjEnum::VAZIO))
+    {
+        me->caindo = true;
+        k=-1;
+    }
     if(me->posicao.y <= (-2 + 2+ DISTANCIA_ANDARES*(me->andarAtual-1)) * FATOR_TAMANHO_MAPA)
     {
         me->andarAtual--;
-        me->caindo = false;
+        k = 1;
+        if(mapa->andares[a].andares[0].grid[Z][X] != ObjEnum::VAZIO)
+        {
+            me->posicao.dy = 48*a;
+           me->caindo = false;
+        }
+
     }
 
-    if(mapa->andares[a].andares[k - 1].grid[Z][X] == ObjEnum::VAZIO)
+
+
+
+
+
+    /*if(me->posicao.y <= (-2 + DISTANCIA_ANDARES*(me->andarAtual-1)) * FATOR_TAMANHO_MAPA)
+    {
+        k = 0;
+        me->caindo = false;
+    }*/
+
+    /*if(mapa->andares[a].andares[k - 1].grid[Z][X] == ObjEnum::VAZIO)
     {
        me->caindo = true;
     }
+    else
+    {
+        std:: cout << (int)mapa->andares[a].andares[1].grid[Z][X] == ObjEnum::VAZIO << std::endl;
+        me->caindo = false;
+    }*/
 
 
 	if ((upPressed || downPressed))
